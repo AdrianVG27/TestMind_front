@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="logos/logo_horizontal_sinFondo.png" alt="TestMind Logo" width="500">
+</p>
+
 # 🧠 TestMind - Frontend (Angular)
 
 <p align="center">

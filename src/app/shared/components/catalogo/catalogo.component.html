@@ -1,0 +1,29 @@
+<div class="testmind-container">
+
+    <div class="filter-shell">
+        <input type="text" placeholder="BUSCAR_POR_NOMBRE..." [ngModel]="filterNombre()"
+            (ngModelChange)="onNombreChange($event)" class="pixel-input font-pixel">
+
+        <select [ngModel]="filterCategoria()" (ngModelChange)="onCategoriaChange($event)"
+            class="pixel-select font-pixel">
+            <option [ngValue]="undefined">TODAS_LAS_CATEGORIAS</option>
+            @for (cat of categorias(); track cat.id) {
+                <option [ngValue]="cat.id">{{ cat.descripcion }}</option>
+            }
+        </select>
+    </div>
+
+    <div class="voxel-grid">
+        <ng-content></ng-content>
+        
+        @if (mostrarAvisoVacio()) {
+            <div class="empty-catalog-notice font-pixel">{{ textoVacio() }}</div>
+        }
+    </div>
+
+    <div class="pagination-ctrl">
+        <button (click)="cambiarPagina(paginaActual() - 1)" [disabled]="paginaActual() === 1" class="btn-pagination"> ◀ </button>
+        <span class="page-info font-vcr">PÁGINA {{ paginaActual() }} DE {{ totalPaginas() }}</span>
+        <button (click)="cambiarPagina(paginaActual() + 1)" [disabled]="paginaActual() === totalPaginas()" class="btn-pagination"> ▶ </button>
+    </div>
+</div>

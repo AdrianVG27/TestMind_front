@@ -1,0 +1,50 @@
+.pdf-reader-container {
+    margin: 1.5rem auto;
+    width: 100%;
+    max-width: 860px;
+    height: calc(100vh - 70px - 3rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+
+.pdf-reader-container embed {
+    width: 100%;
+    height: 100%;
+    border: 3px solid var(--border-blue);
+    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.3);
+    background-color: var(--bg-card);
+    border-radius: 6px;
+}
+
+.loading-box-pdf {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 70px);
+    color: var(--mint);
+    text-align: center;
+}
+
+.spinner-pdf {
+    border: 4px solid rgba(26, 75, 132, .2);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border-left-color: var(--mint);
+    animation: spin-pdf 1s linear infinite;
+    margin-bottom: 1.5rem;
+}
+
+@keyframes spin-pdf {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

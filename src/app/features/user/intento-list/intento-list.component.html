@@ -1,0 +1,15 @@
+<app-catalogo
+    [categorias]="categorias()"
+    [paginaActual]="paginaActual()"
+    [totalPaginas]="totalPaginas()"
+    [mostrarAvisoVacio]="intentos().length === 0" textoVacio="No se encontraron cuestionarios con los filtros aplicados."
+    (filtrar)="onFiltrar($event)">
+
+    @for (intento of intentos(); track intento.id) {
+    <app-intento-card
+            [intento]="intento"
+            (clickCard)="irACorrecion($event)">
+        </app-intento-card>
+    }
+
+</app-catalogo>

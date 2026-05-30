@@ -1,0 +1,10 @@
+<app-catalogo [categorias]="categorias()" [paginaActual]="paginaActual()" [totalPaginas]="totalPaginas()"
+    [mostrarAvisoVacio]="tests().length === 0" textoVacio="No se encontraron cuestionarios con los filtros aplicados."
+    (filtrar)="onFiltrar($event)">
+
+    @for (test of tests(); track test.id) {
+    <app-test-status-card [test]="test" [categorias]="categorias()" (clickCard)="verTest($event)">
+    </app-test-status-card>
+    }
+
+</app-catalogo>

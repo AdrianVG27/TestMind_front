@@ -1,0 +1,41 @@
+<div class="auth-container">
+    <div class="tm-card tm-shadow-blue voxel-card-size">
+        <h2 class="pixel-title font-vcr">{{ 'auth.register_title' | transloco }}</h2>
+
+        <form (ngSubmit)="handleRegister()" class="modal-form">
+            <div class="form-field">
+                <span class="font-pixel label-style">{{ 'auth.name' | transloco }}</span>
+                <input type="text" [(ngModel)]="form.name" name="name" required class="pixel-input font-pixel">
+            </div>
+
+            <div class="form-field">
+                <span class="font-pixel label-style">{{ 'auth.email' | transloco }}</span>
+                <input type="email" [(ngModel)]="form.email" name="email" required class="pixel-input font-pixel">
+            </div>
+
+            <div class="form-field">
+                <span class="font-pixel label-style">{{ 'auth.password' | transloco }}</span>
+                <input type="password" [(ngModel)]="form.password" name="password" required class="pixel-input">
+            </div>
+
+            <div class="form-field">
+                <span class="font-pixel label-style">{{ 'auth.confirm_password' | transloco }}</span>
+                <input type="password" [(ngModel)]="form.password_confirmation" name="password_confirmation" required
+                    class="pixel-input">
+            </div>
+
+            <button type="submit" class="btn-submit font-vcr">
+                {{ 'auth.register_btn' | transloco }}
+            </button>
+        </form>
+
+        <p class="switch-auth font-pixel">
+            {{ 'auth.have_account' | transloco }}
+            @if (hayTestPendiente) {
+            <a href="#" (click)="cambiarAModalLogin($event)" class="auth-link">{{ 'auth.login_link' | transloco }}</a>
+            } @else {
+            <a routerLink="/login" class="auth-link">{{ 'auth.login_link' | transloco }}</a>
+            }
+        </p>
+    </div>
+</div>

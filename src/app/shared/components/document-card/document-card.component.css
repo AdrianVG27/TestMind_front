@@ -1,0 +1,27 @@
+.voxel-card {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+    transition: transform 0.15s ease-in-out, border-color 0.15s;
+}
+
+.voxel-card:hover {
+    border-color: var(--mint);
+    transform: translate(-2px, -2px);
+}
+
+.voxel-card h3 {
+    font-size: 1.3rem;
+    color: var(--text-main);
+    line-height: 1.4;
+    margin: 0;
+}
+
+.category-tag {
+    align-self: flex-start;
+    font-size: 1rem;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}

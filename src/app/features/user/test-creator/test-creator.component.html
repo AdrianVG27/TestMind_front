@@ -1,0 +1,211 @@
+<div class="tm-card tm-shadow-blue create-test-box">
+    <h2 class="pixel-title font-vcr">
+        {{ isReadOnlyMode() ? 'DETALLES_CUESTIONARIO' : 'NUEVO TEST' }}
+    </h2>
+
+    @if (statusMessage()) {
+    <div class="loader-notice font-pixel space-bottom animate-pulse">
+        {{ statusMessage() }}
+    </div>
+    }
+
+    @if (errorMessage()) {
+    <div class="error-notice space-bottom">{{ errorMessage() }}</div>
+    }
+
+    <form (ngSubmit)="onFormSubmit()" class="modal-form">
+
+        <fieldset [disabled]="isProcessing() || isReadOnlyMode()"
+            style="border: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.2rem;">
+
+            @if (!isReadOnlyMode()) {
+            <div class="document-source-toggle space-bottom">
+                <button type="button" class="btn-toggle font-pixel" [class.active]="documentSource() === 'upload'"
+                    (click)="setSource('upload')">
+                    SUBIR NUEVO PDF
+                </button>
+                <button type="button" class="btn-toggle font-pixel" [class.active]="documentSource() === 'existing'"
+                    (click)="setSource('existing')">
+                    REUTILIZAR EXISTENTE
+                </button>
+            </div>
+            }
+
+            <div class="form-row-2">
+                <div class="form-field">
+                    <span class="font-pixel label-style">TÍTULO DEL TEST</span>
+                    <input type="text" [ngModel]="testForm.titulo()" (ngModelChange)="testForm.titulo.set($event)"
+                        name="titulo" required class="pixel-input">
+                </div>
+
+                @if (documentSource() === 'upload') {
+                <div class="form-field">
+                    <span class="font-pixel label-style">CATEGORÍA</span>
+                    <select [ngModel]="testForm.categoria_id()" (ngModelChange)="testForm.categoria_id.set($event)"
+                        name="categoria_id" required class="pixel-select font-pixel">
+                        <option [ngValue]="null" disabled selected>SELECCIONAR...</option>
+                        @for (cat of categorias(); track cat.id) {
+                        <option [ngValue]="cat.id">{{ cat.descripcion }}</option>
+                        }
+                    </select>
+                </div>
+                } @else {
+                <div class="form-field">
+                    <span class="font-pixel label-style">CATEGORÍA (ASOCIADA AL APUNTE)</span>
+                    <input type="text" [value]="categoriaDelDocumentoSeleccionado() || 'Auto-detectada...'"
+                        class="pixel-input font-pixel input-readonly" readonly placeholder="Auto-detectada...">
+                </div>
+                }
+            </div>
+
+            @if (documentSource() === 'upload') {
+            <div class="form-row-2 align-center no-margin">
+                <div class="form-field">
+                    <span class="font-pixel label-style">ARCHIVO PDF (MÁX 12MB)</span>
+                    <input type="file" (change)="onFileSelected($event)" accept="application/pdf"
+                        class="pixel-file-input font-pixel" required>
+                </div>
+                <div class="remember-field">
+                    <label class="remember-label font-pixel">
+                        <input type="checkbox" [ngModel]="testForm.isPublic()"
+                            (ngModelChange)="testForm.isPublic.set($event)" name="isPublic" class="pixel-checkbox">
+                        <span class="checkbox-text">DOCUMENTO PÚBLICO</span>
+                    </label>
+                </div>
+            </div>
+            }
+        </fieldset>
+
+        @if (documentSource() === 'existing') {
+        <div class="existing-docs-explorer">
+            <span class="font-pixel label-style">DOCUMENTO ASOCIADO</span>
+
+            @if (!isReadOnlyMode()) {
+            <div class="explorer-filters">
+                <input type="text" placeholder="FILTRAR POR NOMBRE..." [ngModel]="filtroNombreLocal()"
+                    (ngModelChange)="filtroNombreLocal.set($event)" name="filterNombre"
+                    class="pixel-input font-pixel input-small">
+                <select [ngModel]="filtroCategoriaLocal()" (ngModelChange)="filtroCategoriaLocal.set($event)"
+                    name="filterCategoria" class="pixel-select font-pixel select-small">
+                    <option [ngValue]="undefined">TODAS</option>
+                    @for (cat of categorias(); track cat.id) {
+                    <option [ngValue]="cat.id">{{ cat.descripcion }}</option>
+                    }
+                </select>
+            </div>
+            }
+
+            <div class="explorer-list">
+                @for (doc of documentosFiltrados(); track doc.id) {
+                <div class="explorer-item" [class.selected]="testForm.documento_id() === doc.id">
+                    <div class="item-meta">
+                        <span class="item-name font-vcr">{{ doc.nombre }}</span>
+                        <span class="item-cat font-pixel">{{ obtenerNombreCategoria(doc.categoria_id) }}</span>
+                    </div>
+                    <div class="item-actions">
+                        <button type="button" class="btn-action-view" [disabled]="isProcessing()"
+                            (click)="abrirPrevisualizador(doc.id, $event)">👁</button>
+
+                        @if (!isReadOnlyMode()) {
+                        <button type="button" class="btn-action-select font-pixel" [disabled]="isProcessing()"
+                            (click)="seleccionarDocumentoLocal(doc)">
+                            {{ testForm.documento_id() === doc.id ? 'SELECTED' : 'SELECT' }}
+                        </button>
+                        }
+                    </div>
+                </div>
+                } @empty {
+                <div class="empty-explorer font-pixel">No se encontraron apuntes asociados.</div>
+                }
+            </div>
+        </div>
+        }
+
+        <fieldset [disabled]="isProcessing() || isReadOnlyMode()"
+            style="border: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.2rem;">
+            <hr class="pixel-divider">
+
+            <div class="form-row-3">
+                <div class="form-field">
+                    <span class="font-pixel label-style">NIVEL</span>
+                    <select [ngModel]="testForm.nivel()" (ngModelChange)="testForm.nivel.set($event)" name="nivel"
+                        class="pixel-select font-pixel">
+                        <option value="facil">FÁCIL</option>
+                        <option value="medio">MEDIO</option>
+                        <option value="dificil">DIFÍCIL</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <span class="font-pixel label-style">TOTAL PREGUNTAS</span>
+                    <input type="number" [ngModel]="testForm.total()" (ngModelChange)="testForm.total.set($event)"
+                        name="total" min="1" class="pixel-input font-pixel">
+                </div>
+                <div class="form-field">
+                    <span class="font-pixel label-style">MÍN OPCIONES</span>
+                    <input type="number" [ngModel]="testForm.min_opciones()"
+                        (ngModelChange)="testForm.min_opciones.set($event)" name="min_opciones"
+                        class="pixel-input font-pixel">
+                </div>
+            </div>
+
+            <div class="form-row-3">
+                <div class="form-field">
+                    <span class="font-pixel label-style">PROP ÚNICA (%)</span>
+                    <input type="number" [ngModel]="testForm.prop_unica()"
+                        (ngModelChange)="testForm.prop_unica.set($event)" name="prop_unica"
+                        class="pixel-input font-pixel">
+                </div>
+                <div class="form-field">
+                    <span class="font-pixel label-style">PROP MULTI (%)</span>
+                    <input type="number" [ngModel]="testForm.prop_multi()"
+                        (ngModelChange)="testForm.prop_multi.set($event)" name="prop_multi"
+                        class="pixel-input font-pixel">
+                </div>
+                <div class="form-field">
+                    <span class="font-pixel label-style">PROP ESCRIBIR (%)</span>
+                    <input type="number" [ngModel]="testForm.prop_escribir()"
+                        (ngModelChange)="testForm.prop_escribir.set($event)" name="prop_escribir"
+                        class="pixel-input font-pixel">
+                </div>
+            </div>
+
+            <div class="form-field">
+                <span class="font-pixel label-style">INDICACIONES EXTRAS IA (OPCIONAL)</span>
+                <textarea [ngModel]="testForm.input_user()" (ngModelChange)="testForm.input_user.set($event)"
+                    name="input_user" maxlength="500" class="pixel-textarea font-pixel"
+                    placeholder="Ej: Enfócate más en el capítulo 3..."></textarea>
+            </div>
+        </fieldset>
+
+        <div class="form-actions-zone space-top">
+            @if (!isReadOnlyMode()) {
+            <button type="submit" class="btn-submit font-vcr" [disabled]="isProcessing() || !isFormValid()">
+                {{ isProcessing() ? 'PROCESANDO...' : 'START_GENERATION ➔' }}
+            </button>
+            } @else {
+            @if (testEstadoCodigo() === 'err') {
+            <button type="submit" class="btn-submit btn-reintento font-vcr" [disabled]="isProcessing()">
+                {{ isProcessing() ? 'REPROCESANDO...' : '🔄 REINTENTAR_GENERACION_IA' }}
+            </button>
+            }
+            }
+        </div>
+    </form>
+</div>
+
+@if (mostrarModalPdf() && pdfUrlBlob()) {
+<div class="pixel-modal-overlay" (click)="cerrarPrevisualizador()">
+    <div class="pixel-modal-content tm-card tm-shadow-blue" (click)="$event.stopPropagation()">
+        <header class="modal-pdf-header">
+            <span class="font-vcr modal-pdf-title">PREVIEW_MODE.EXE</span>
+            <button type="button" class="btn-close-modal font-pixel" (click)="cerrarPrevisualizador()">✖</button>
+        </header>
+        <div class="modal-pdf-body">
+            <object [data]="pdfUrlBlob()" type="application/pdf" width="100%" height="100%">
+                <p class="font-pixel text-center">Tu navegador no soporta la vista del PDF. <a [href]="pdfUrlBlob()"
+                        target="_blank">Haz clic aquí para abrirlo</a></p>
+            </object>
+        </div>
+    </div>
+</div>
+}

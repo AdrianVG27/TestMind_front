@@ -1,0 +1,71 @@
+<div class="results-container">
+    @if (resultado(); as datos) {
+    <section class="tm-card tm-shadow-blue score-card-margin">
+        <header class="score-header">
+            <h2 class="font-vcr">CUESTIONARIO FINALIZADO</h2>
+        </header>
+        <div class="score-analytics">
+            <div class="score-circle">
+                <span class="score-number">{{ datos.nota }}</span>
+                <span class="score-max">/10</span>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <span class="metric-label">ACIERTOS:</span>
+                    <span class="metric-value value-success">{{ datos.aciertos }}</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">TOTAL:</span>
+                    <span class="metric-value">{{ datos.total }}</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="feedback-list">
+        <h3 class="font-vcr list-title">REVISIÓN ACADÉMICA</h3>
+
+        @for (item of datos.feedback; track $index) {
+        <article class="tm-card tm-shadow-black feedback-card" [class.local-card-success]="item.acierto"
+            [class.local-card-error]="!item.acierto">
+            <header class="card-meta">
+                <span class="question-index font-pixel">PREGUNTA {{ $index + 1 }}</span>
+                @if (item.acierto) {
+                <span class="status-tag tag-success font-vcr">✔ CORRECTA</span>
+                } @else {
+                <span class="status-tag tag-error font-vcr">✘ INCORRECTA</span>
+                }
+            </header>
+
+            <p class="enunciado">{{ item.enunciado }}</p>
+
+            <div class="answers-review-box">
+                <div class="user-answer">
+                    <span class="answer-label font-pixel">Tu respuesta:</span>
+                    <span class="answer-text">
+                        @if (item.tu_respuesta) {
+                        {{ item.tu_respuesta }}
+                        } @else {
+                        <span class="text-muted">[Pregunta dejada en blanco]</span>
+                        }
+                    </span>
+                </div>
+
+                @if (!item.acierto) {
+                <div class="correct-answer">
+                    <span class="answer-label font-pixel">Solución correcta:</span>
+                    <span class="answer-text corrected-color">{{ item.correcta }}</span>
+                </div>
+                }
+            </div>
+        </article>
+        }
+    </main>
+
+    <footer class="results-actions">
+        <button class="btn-return font-vcr" (click)="volverAlPanel()">
+            Volver
+        </button>
+    </footer>
+    }
+</div>

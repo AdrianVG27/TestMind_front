@@ -1,0 +1,55 @@
+<nav class="nav-container">
+    <div class="logo-section">
+        <a routerLink="/home" class="brand font-vcr">TESTMIND_</a>
+    </div>
+
+    <ul class="nav-links">
+        <li>
+            <a routerLink="/home" routerLinkActive="active-link" class="nav-item">
+                {{ 'nav.home' | transloco }}
+            </a>
+        </li>
+        <li>
+            <a routerLink="/docs" routerLinkActive="active-link" class="nav-item">
+                {{ 'nav.documents' | transloco }}
+            </a>
+        </li>
+        <li>
+            <a routerLink="/tests" routerLinkActive="active-link" class="nav-item">
+                {{ 'nav.tests' | transloco }}
+            </a>
+        </li>
+        @if(isAuthenticated()) {
+        <li>
+            <a routerLink="/creator" routerLinkActive="active-link" class="nav-item">
+                CREAR TEST
+            </a>
+        </li>
+        }
+    </ul>
+
+    <div class="user-badge">
+        @if (isAuthenticated()) {
+        <button (click)="logout()" class="btn-logout font-vcr">
+            {{ 'nav.logout' | transloco }}
+        </button>
+        <span class="plan-tag font-pixel">{{ userPlan() }}</span>
+        <a routerLink="/profile" routerLinkActive="active-link" class="nav-item btn-profile">
+            {{ 'nav.profile' | transloco }}
+        </a>
+        } @else {
+        <a routerLink="/login" routerLinkActive="active-link" class="nav-item btn-profile">
+            {{ 'nav.login' | transloco }}
+        </a>
+        }
+
+        <div class="lang-selector">
+            <select [value]="langActivo" (change)="cambiarIdioma($any($event.target).value)"
+                class="lang-dropdown font-pixel">
+                <option value="es">Castellano</option>
+                <option value="gl">Galego</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+    </div>
+</nav>

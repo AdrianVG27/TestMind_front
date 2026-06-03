@@ -21,7 +21,4 @@ export class CategoriaService {
     );
   }
 
-  show(id: number) {
-    return this.http.get<Categoria>(`${this.API_URL}/${id}`);
-  }
 }

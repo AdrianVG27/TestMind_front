@@ -859,3 +859,117 @@ button {
 .pixel-file-input:hover {
     border-color: var(--mint);
 }
+
+.tm-view-wide {
+    width: 95vw;
+    max-width: 1700px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.tm-table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 4px;
+}
+
+.tm-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+    table-layout: auto;
+}
+
+.tm-table th,
+.tm-table td {
+    padding: 1rem;
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+.tm-table th {
+    color: var(--mint);
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border-blue);
+    text-align: left;
+    white-space: nowrap;
+}
+
+.tm-table td {
+    border-bottom: 1px solid var(--border-subtle);
+    word-break: break-all;
+}
+
+.tm-input-cell {
+    padding: 0.5rem !important;
+    font-size: 0.9rem !important;
+    min-width: 120px;
+}
+
+.tm-editing-row {
+    background-color: rgba(26, 75, 132, 0.15);
+}
+
+.tm-locked-input {
+    background-color: rgba(24, 34, 45, 0.4) !important;
+    border-color: var(--border-subtle) !important;
+    color: var(--text-muted) !important;
+    cursor: not-allowed;
+    box-shadow: none !important;
+}
+
+.tm-creation-row {
+    background-color: rgba(92, 240, 165, 0.04);
+}
+
+.tm-creation-highlight {
+    border-color: rgba(92, 240, 165, 0.4) !important;
+}
+
+.tm-creation-highlight:focus {
+    border-color: var(--mint) !important;
+    box-shadow: 0 0 6px var(--mint-glow) !important;
+}
+
+.tm-text-italic {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.tm-flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tm-flex-center {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.tm-btn-padded {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.85rem !important;
+    white-space: nowrap;
+}
+
+.tm-btn-mint-border {
+    border: 1px solid var(--mint) !important;
+    color: var(--mint) !important;
+}
+
+.tm-btn-mint-border:hover {
+    background-color: rgba(92, 240, 165, 0.1) !important;
+}
+
+.tm-btn-del {
+    color: var(--error) !important;
+    border: 1px solid var(--border-blue);
+}
+
+.tm-btn-del:hover {
+    border-color: var(--error) !important;
+    background: var(--error-bg) !important;
+}

@@ -3,7 +3,7 @@ export interface Test {
     titulo: string;
     codigo_estado: string;
     estado: string;
-    categoria_id: number;
+    categoria_codigo: string;
     documento_id: number;
     configuracion: any;
 }

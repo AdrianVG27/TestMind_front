@@ -17,22 +17,22 @@ export class TestService {
   public lastPage = computed(() => this._paginationState()?.meta.last_page || 1);
   public totalTests = computed(() => this._paginationState()?.meta.total || 0);
 
-  testsPaginate(page: number = 1, titulo?: string, categoriaId?: number) {
+  testsPaginate(page: number = 1, titulo?: string, categoriaCodigo?: string) {
     let params = new HttpParams().set('page', page.toString());
 
     if (titulo) params = params.set('titulo', titulo);
-    if (categoriaId) params = params.set('categoria_id', categoriaId.toString());
+    if (categoriaCodigo) params = params.set('categoria_codigo', categoriaCodigo);
 
     return this.http.get<LaravelPagination<Test>>('/api/tests', { params }).pipe(
       tap(res => this._paginationState.set(res))
     );
   }
 
-  obtenerMisTests(page: number = 1, titulo?: string, categoriaId?: number): Observable<LaravelPagination<Test>> {
+  obtenerMisTests(page: number = 1, titulo?: string, categoriaCodigo?: string): Observable<LaravelPagination<Test>> {
     let params = new HttpParams().set('page', page.toString());
 
     if (titulo) params = params.set('titulo', titulo);
-    if (categoriaId) params = params.set('categoria_id', categoriaId.toString());
+    if (categoriaCodigo) params = params.set('categoria_codigo', categoriaCodigo);
 
     return this.http.get<LaravelPagination<Test>>('/api/user/test', { params }).pipe(
       tap(res => this._paginationState.set(res))

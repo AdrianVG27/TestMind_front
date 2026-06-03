@@ -6,9 +6,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class GetCategoriaPipe implements PipeTransform {
 
-  transform(categoriaId: number, categorias: any[] | null): string {
-    if (!categorias || !categoriaId) return 'Sin categoría';
-    const cat = categorias.find(c => c.id === categoriaId);
+  transform(categoriaCodigo: string, categorias: any[] | null): string {
+    if (!categorias || !categoriaCodigo) return 'Sin categoría';
+    const cat = categorias.find(c => c.codigo === categoriaCodigo);
     return cat ? cat.descripcion : 'No encontrada';
   }
 

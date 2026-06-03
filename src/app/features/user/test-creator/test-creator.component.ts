@@ -32,7 +32,7 @@ export class TestCreatorComponent {
   testEstadoCodigo = signal<string>('');
 
   filtroNombreLocal = signal<string>('');
-  filtroCategoriaLocal = signal<number | undefined>(undefined);
+  filtroCategoriaLocal = signal<string | undefined>(undefined);
 
   mostrarModalPdf = signal<boolean>(false);
   pdfUrlBlob = signal<SafeResourceUrl | null>(null);
@@ -45,7 +45,7 @@ export class TestCreatorComponent {
 
   testForm = {
     titulo: signal(''),
-    categoria_id: signal<number | null>(null),
+    categoria_codigo: signal<string | null>(null),
     documento_id: signal<number | null>(null),
     isPublic: signal(false),
     nivel: signal('medio'),
@@ -67,13 +67,13 @@ export class TestCreatorComponent {
     }
 
     const nombre = this.filtroNombreLocal().toLowerCase().trim();
-    const catId = this.filtroCategoriaLocal();
+    const catCodigo = this.filtroCategoriaLocal();
 
     if (nombre) {
       docs = docs.filter(d => d.nombre.toLowerCase().includes(nombre));
     }
-    if (catId !== undefined) {
-      docs = docs.filter(d => d.categoria_id === catId);
+    if (catCodigo !== undefined) {
+      docs = docs.filter(d => d.categoria_codigo === catCodigo);
     }
     return docs;
   });
@@ -143,7 +143,7 @@ export class TestCreatorComponent {
 
       const docAsociado = this.misDocumentos().find(d => d.id === testExistente.documento_id);
       if (docAsociado) {
-        const nombreCat = this.obtenerNombreCategoria(docAsociado.categoria_id);
+        const nombreCat = this.obtenerNombreCategoria(docAsociado.categoria_codigo);
         this.categoriaDelDocumentoSeleccionado.set(nombreCat);
       }
 
@@ -161,19 +161,19 @@ export class TestCreatorComponent {
       this.categoriaDelDocumentoSeleccionado.set('');
     } else {
       this.selectedFile = null;
-      this.testForm.categoria_id.set(null);
+      this.testForm.categoria_codigo.set(null);
     }
   }
 
-  obtenerNombreCategoria(id: number): string {
-    const cat = this.categorias().find(c => c.id === id);
+  obtenerNombreCategoria(codigo: string): string {
+    const cat = this.categorias().find(c => c.codigo === codigo);
     return cat ? cat.descripcion : 'General';
   }
 
   seleccionarDocumentoLocal(doc: any) {
     if (this.isReadOnlyMode()) return;
     this.testForm.documento_id.set(doc.id);
-    this.categoriaDelDocumentoSeleccionado.set(this.obtenerNombreCategoria(doc.categoria_id));
+    this.categoriaDelDocumentoSeleccionado.set(this.obtenerNombreCategoria(doc.categoria_codigo));
   }
 
   volverAlPerfil() {
@@ -216,7 +216,7 @@ export class TestCreatorComponent {
   isFormValid(): boolean {
     if (this.isReadOnlyMode()) return this.testEstadoCodigo() === 'err';
     if (this.documentSource() === 'upload') {
-      return !!this.selectedFile && !!this.testForm.categoria_id() && !!this.testForm.titulo();
+      return !!this.selectedFile && !!this.testForm.categoria_codigo() && !!this.testForm.titulo();
     }
     return !!this.testForm.documento_id() && !!this.testForm.titulo();
   }
@@ -270,7 +270,7 @@ export class TestCreatorComponent {
       this.statusMessage.set('Subiendo archivo PDF al servidor...');
       const docData = new FormData();
       docData.append('pdf', this.selectedFile);
-      docData.append('categoria_id', this.testForm.categoria_id()!.toString());
+      docData.append('categoria_codigo', this.testForm.categoria_codigo()!);
       docData.append('isPublic', this.testForm.isPublic() ? '1' : '0');
       ejecucionObservable$ = this.docService.subirDocumento(docData);
     } else {

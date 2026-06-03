@@ -32,11 +32,11 @@ export class DocumentListComponent {
   }
 
   onFiltrar(filtros: FiltrosCatalogo) {
-    this.ejecutarBusqueda(filtros.pagina, filtros.nombre, filtros.categoriaId);
+    this.ejecutarBusqueda(filtros.pagina, filtros.nombre, filtros.categoriaCodigo);
   }
 
-  private ejecutarBusqueda(page: number, nombre: string, categoriaId: number | undefined) {
-    this.docService.documentosPublicos(page, nombre, categoriaId).subscribe();
+  private ejecutarBusqueda(page: number, nombre: string, categoriaCodigo: string | undefined) {
+    this.docService.documentosPublicos(page, nombre, categoriaCodigo).subscribe();
   }
 
   verDocumento(id: number) {

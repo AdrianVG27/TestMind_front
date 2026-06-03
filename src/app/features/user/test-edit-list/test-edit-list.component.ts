@@ -32,11 +32,11 @@ export class TestEditListComponent {
   }
 
   onFiltrar(filtros: FiltrosCatalogo) {
-    this.ejecutarBusqueda(filtros.pagina, filtros.nombre, filtros.categoriaId);
+    this.ejecutarBusqueda(filtros.pagina, filtros.nombre, filtros.categoriaCodigo);
   }
 
-  private ejecutarBusqueda(page: number, nombre: string, categoriaId: number | undefined) {
-    this.testService.obtenerMisTests(page, nombre, categoriaId).subscribe();
+  private ejecutarBusqueda(page: number, nombre: string, categoriaCodigo: string | undefined) {
+    this.testService.obtenerMisTests(page, nombre, categoriaCodigo).subscribe();
   }
 
   verTest(id: number) {

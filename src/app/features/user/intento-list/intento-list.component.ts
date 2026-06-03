@@ -31,13 +31,14 @@ export class IntentoListComponent implements OnInit {
 
   cargarCategorias() {
     this.catService.index().subscribe(cats => this.categorias.set(cats));
+    console.table(this.categorias);
   }
 
   onFiltrar(filtros: FiltrosCatalogo) {
-    this.ejecutarBusqueda(filtros.pagina, filtros.nombre, filtros.categoriaId);
+    this.ejecutarBusqueda(filtros.pagina, filtros.nombre, filtros.categoriaCodigo);
   }
 
-  private ejecutarBusqueda(page: number, nombre: string, categoriaId: number | undefined) {
+  private ejecutarBusqueda(page: number, nombre: string, categoriaCodigo: string | undefined) {
     this.metricService.cargarHistorialIntentos().subscribe();
   }
 

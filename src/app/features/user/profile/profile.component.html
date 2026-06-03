@@ -79,7 +79,7 @@
                 <div class="tm-list-row" (click)="irAEdicion(test.id)">
                     <div class="row-main">
                         <span class="row-title">{{ test.titulo }}</span>
-                        <span class="row-subtitle font-vcr">{{ test.categoria_id | getCategoria: categorias() }}</span>
+                        <span class="row-subtitle font-vcr">{{ test.categoria_codigo | getCategoria: categorias() }}</span>
                     </div>
                     <span class="row-badge badge-neutral font-vcr" [class.badge-pass]="test.codigo_estado == 'pass'" [class.badge-neutral]="test.codigo_estado == 'pro'" [class.badge-fail]="test.codigo_estado == 'err'">{{ test.estado }}</span>
                 </div>

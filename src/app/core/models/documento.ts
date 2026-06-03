@@ -2,5 +2,5 @@ export interface Documento {
     id: number;
     nombre: string;
     isPublic: boolean;
-    categoria_id: number;
+    categoria_codigo: string;
 }

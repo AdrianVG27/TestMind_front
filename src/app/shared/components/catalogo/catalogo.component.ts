@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 
 export interface FiltrosCatalogo {
   nombre: string;
-  categoriaId: number | undefined;
+  categoriaCodigo: string | undefined;
   pagina: number;
 }
 
@@ -24,14 +24,14 @@ export class CatalogoComponent {
   filtrar = output<FiltrosCatalogo>();
 
   filterNombre = signal<string>('');
-  filterCategoria = signal<number | undefined>(undefined);
+  filterCategoria = signal<string | undefined>(undefined);
 
   onNombreChange(nuevoNombre: string) {
     this.filterNombre.set(nuevoNombre);
     this.emitirFiltros(1);
   }
 
-  onCategoriaChange(nuevaCategoria: number | undefined) {
+  onCategoriaChange(nuevaCategoria: string | undefined) {
     this.filterCategoria.set(nuevaCategoria);
     this.emitirFiltros(1);
   }
@@ -45,7 +45,7 @@ export class CatalogoComponent {
   private emitirFiltros(pagina: number) {
     this.filtrar.emit({
       nombre: this.filterNombre(),
-      categoriaId: this.filterCategoria(),
+      categoriaCodigo: this.filterCategoria(),
       pagina: pagina
     });
   }

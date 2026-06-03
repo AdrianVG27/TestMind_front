@@ -1,0 +1,11 @@
+.chart-card {
+    max-width: 450px;
+    margin: 1.5rem 0;
+}
+
+.chart-container-wrapper {
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

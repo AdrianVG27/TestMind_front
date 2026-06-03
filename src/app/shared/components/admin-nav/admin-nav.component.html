@@ -1,1 +1,39 @@
-<p>admin-nav works!</p>
+<nav class="nav-container">
+    <div class="logo-section">
+        <a routerLink="/home" class="brand font-vcr">TESTMIND_</a>
+    </div>
+
+    <ul class="nav-links">
+        <li>
+            <a routerLink="/admin/dashboard" routerLinkActive="active-link" class="nav-item">
+                {{ 'nav.adminDashboard' | transloco }}
+            </a>
+        </li>
+        <li>
+            <a routerLink="/admin/support-tables-management" routerLinkActive="active-link" class="nav-item">
+                {{ 'nav.adminGestionTA' | transloco }}
+            </a>
+        </li>
+    </ul>
+
+    <div class="user-badge">
+        @if (isAuthenticated()) {
+        <button (click)="logout()" class="btn-logout font-vcr">
+            {{ 'nav.logout' | transloco }}
+        </button>
+        } @else {
+        <a routerLink="/login" routerLinkActive="active-link" class="nav-item btn-profile">
+            {{ 'nav.login' | transloco }}
+        </a>
+        }
+
+        <div class="lang-selector">
+            <select [value]="langActivo" (change)="cambiarIdioma($any($event.target).value)"
+                class="lang-dropdown font-pixel">
+                <option value="es">Castellano</option>
+                <option value="gl">Galego</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+    </div>
+</nav>

@@ -18,11 +18,11 @@ export class DocumentService {
   public totalDocumentos = computed(() => this._paginationState()?.meta.total || 0);
   public misDocumentos = computed(() => this._misDocumentosState());
 
-  documentosPublicos(page: number = 1, nombre?: string, categoriaId?: number) {
+  documentosPublicos(page: number = 1, nombre?: string, categoriaCodigo?: string) {
     let params = new HttpParams().set('page', page.toString());
 
     if (nombre) params = params.set('nombre', nombre);
-    if (categoriaId) params = params.set('categoria_id', categoriaId.toString());
+    if (categoriaCodigo) params = params.set('categoria_codigo', categoriaCodigo);
 
     return this.http.get<LaravelPagination<Documento>>('/api/documentos', { params }).pipe(
       tap(res => this._paginationState.set(res))

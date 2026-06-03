@@ -2,7 +2,7 @@
     <div class="card-main-info">
         <h3 class="font-vcr">{{ test().titulo || 'Cuestionario Eliminado' }}</h3>
         <span class="category-tag font-pixel">
-            {{ test().categoria_id | getCategoria: categorias() }}
+            {{ test().categoria_codigo | getCategoria: categorias() }}
         </span>
     </div>
 

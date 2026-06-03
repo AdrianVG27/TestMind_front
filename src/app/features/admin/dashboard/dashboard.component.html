@@ -1,1 +1,22 @@
-<p>dashboard works!</p>
+<div class="admin-dashboard-layout">
+    <h1 class="font-vcr pixel-title">CORE_ADMIN_PANEL // METRICS</h1>
+
+    <div class="metrics-grid">
+        <section class="tm-card tm-shadow-blue local-panel-padding chart-card">
+            <header class="panel-header">
+                <h3 class="font-vcr">SEGMENTACIÓN DE USUARIOS (PLANES)</h3>
+            </header>
+
+            <div class="chart-container-wrapper">
+                @if (isVisualLoading() && chartLabels().length === 0) {
+                <div class="empty-list-notice font-pixel animate-pulse">
+                    CONECTANDO CON EL REGISTRO DE MEMBRESÍAS...
+                </div>
+                } @else {
+                <app-pie-chart [labels]="chartLabels()" [data]="chartData()">
+                </app-pie-chart>
+                }
+            </div>
+        </section>
+    </div>
+</div>

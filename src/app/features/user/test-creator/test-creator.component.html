@@ -41,11 +41,11 @@
                 @if (documentSource() === 'upload') {
                 <div class="form-field">
                     <span class="font-pixel label-style">CATEGORÍA</span>
-                    <select [ngModel]="testForm.categoria_id()" (ngModelChange)="testForm.categoria_id.set($event)"
-                        name="categoria_id" required class="pixel-select font-pixel">
+                    <select [ngModel]="testForm.categoria_codigo()" (ngModelChange)="testForm.categoria_codigo.set($event)"
+                        name="categoria_codigo" required class="pixel-select font-pixel">
                         <option [ngValue]="null" disabled selected>SELECCIONAR...</option>
                         @for (cat of categorias(); track cat.id) {
-                        <option [ngValue]="cat.id">{{ cat.descripcion }}</option>
+                        <option [ngValue]="cat.codigo">{{ cat.descripcion }}</option>
                         }
                     </select>
                 </div>
@@ -100,7 +100,7 @@
                 <div class="explorer-item" [class.selected]="testForm.documento_id() === doc.id">
                     <div class="item-meta">
                         <span class="item-name font-vcr">{{ doc.nombre }}</span>
-                        <span class="item-cat font-pixel">{{ obtenerNombreCategoria(doc.categoria_id) }}</span>
+                        <span class="item-cat font-pixel">{{ obtenerNombreCategoria(doc.categoria_codigo) }}</span>
                     </div>
                     <div class="item-actions">
                         <button type="button" class="btn-action-view" [disabled]="isProcessing()"

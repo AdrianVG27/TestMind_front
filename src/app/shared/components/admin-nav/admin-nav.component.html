@@ -14,6 +14,11 @@
                 {{ 'nav.adminGestionTA' | transloco }}
             </a>
         </li>
+        <li>
+            <a routerLink="/admin/languages-management" routerLinkActive="active-link" class="nav-item">
+                {{ 'nav.adminGestionLenguajes' | transloco }}
+            </a>
+        </li>
     </ul>
 
     <div class="user-badge">
@@ -28,12 +33,7 @@
         }
 
         <div class="lang-selector">
-            <select [value]="langActivo" (change)="cambiarIdioma($any($event.target).value)"
-                class="lang-dropdown font-pixel">
-                <option value="es">Castellano</option>
-                <option value="gl">Galego</option>
-                <option value="en">English</option>
-            </select>
+            <app-lang-selector></app-lang-selector>
         </div>
     </div>
 </nav>

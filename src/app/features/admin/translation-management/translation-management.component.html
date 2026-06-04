@@ -1,0 +1,98 @@
+<div class="admin-dashboard-layout">
+    <h1 class="font-vcr pixel-title">CORE_ADMIN_PANEL // INTERFACE_DICTIONARY</h1>
+
+    <div class="lang-tabs-container">
+        @for (idioma of idiomasDisponibles(); track idioma.codigo) {
+        <button (click)="cambiarFiltroIdioma(idioma.codigo)" [class.active-tab]="idiomaFiltro() === idioma.codigo"
+            class="tab-btn font-pixel">
+            // {{ idioma.descripcion | uppercase }}
+        </button>
+        }
+    </div>
+
+    <section class="tm-card tm-shadow-blue tm-panel-breathing">
+        <header class="panel-header text-between">
+            <h3 class="font-vcr">DICCIONARIO ACTIVO: {{ idiomaFiltro() | uppercase }}</h3>
+            @if (isLoading()) {
+            <span class="loading-tag font-pixel animate-pulse">SINKRONIZANDO...</span>
+            }
+        </header>
+
+        <div class="toolbar-cyber">
+            <div class="search-box">
+                <span class="search-icon font-vcr">></span>
+                <input type="text" [placeholder]="'FILTRAR POR VARIABLE O CONTENIDO...'" [value]="terminoBusqueda()"
+                    (input)="actualizarBusqueda($any($event.target).value)" class="search-input font-pixel" />
+            </div>
+
+            <button (click)="abrirModalCrear()" class="btn-action-cyber font-vcr">
+                [+] NUEVA CLAVE
+            </button>
+        </div>
+
+        <div class="table-responsive-wrapper">
+            <table class="tm-pixel-table">
+                <thead>
+                    <tr class="font-vcr">
+                        <th style="width: 35%;">VARIABLE (CLAVE)</th>
+                        <th style="width: 60%;">LITERAL TEXTUAL (VALOR EN BD)</th>
+                        <th style="width: 5%; text-align: center;">AKCIÓN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of traduccionesFiltradas(); track item.id) {
+                    <tr>
+                        <td class="font-pixel text-muted-cyber">{{ item.clave }}</td>
+                        <td>
+                            <input type="text" [value]="item.valor" #inputValor
+                                (blur)="guardarCambioEnLinea(item, inputValor.value)"
+                                (keydown.enter)="guardarCambioEnLinea(item, inputValor.value); inputValor.blur()"
+                                class="inline-edit-input font-pixel" />
+                        </td>
+                        <td style="text-align: center;">
+                            <button (click)="eliminarClaveDiccionario(item.clave)" title="Purgar variable"
+                                class="btn-delete-cyber font-vcr">
+                                [X]
+                            </button>
+                        </td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                        <td colspan="3" class="empty-notice font-pixel">
+                            NO SE DETECTARON LITERALES QUE COINCIDAN CON LOS CRITERIOS.
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    @if (mostrarModal()) {
+    <div class="cyber-modal-overlay">
+        <div class="cyber-modal tm-card tm-shadow-blue">
+            <header class="panel-header">
+                <h3 class="font-vcr highlight-mint">// REGISTRAR_NUEVA_VARIABLE</h3>
+            </header>
+
+            <div class="modal-body font-pixel">
+                <div class="form-group">
+                    <label class="font-vcr">IDENTIFICADOR (CLAVE DOT-NOTATION):</label>
+                    <input type="text" [(ngModel)]="nuevaClave" placeholder="ej: auth.welcome_message"
+                        class="inline-edit-input" />
+                </div>
+                <div class="form-group">
+                    <label class="font-vcr">CONTENIDO TEXTUAL (VALOR):</label>
+                    <input type="text" [(ngModel)]="nuevoValor" placeholder="Texto que se renderizará..."
+                        class="inline-edit-input" />
+                </div>
+            </div>
+
+            <footer class="modal-footer">
+                <button (click)="cerrarModal()" class="btn-cancel font-vcr">CANCELAR</button>
+                <button (click)="crearNuevaTraduccion()" class="btn-action-cyber font-vcr">INYECTAR EN CORE</button>
+            </footer>
+        </div>
+    </div>
+    }
+</div>

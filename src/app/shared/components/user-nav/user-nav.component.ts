@@ -2,31 +2,23 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { TranslocoPipe, TranslocoService } from '@ngneat/transloco';
+import { TranslocoPipe } from '@ngneat/transloco';
+import { LangSelectorComponent } from "../lang-selector/lang-selector.component";
 
 @Component({
   selector: 'app-user-nav',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, TranslocoPipe],
+  imports: [CommonModule, RouterLink, RouterLinkActive, TranslocoPipe, LangSelectorComponent],
   templateUrl: './user-nav.component.html',
   styleUrl: './user-nav.component.css'
 })
 export class UserNavComponent {
-  private translocoService = inject(TranslocoService);
   private authService = inject(AuthService);
 
-  userPlan = this.authService.userPlan;
-  isAuthenticated = this.authService.isAuthenticated;
+  public isAuthenticated = this.authService.isAuthenticated;
+  public userPlan = this.authService.userPlan;
 
   logout() {
     this.authService.logout();
-  }
-
-  cambiarIdioma(lang: string) {
-    this.translocoService.setActiveLang(lang);
-  }
-
-  get langActivo() {
-    return this.translocoService.getActiveLang();
   }
 }

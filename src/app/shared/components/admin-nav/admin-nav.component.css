@@ -100,20 +100,3 @@
 .lang-selector {
     margin-left: 5px;
 }
-
-.lang-dropdown {
-    background-color: var(--bg-card);
-    color: var(--text-main);
-    border: 2px solid var(--border-blue);
-    padding: 4px 8px;
-    font-size: 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    outline: none;
-    transition: border-color 0.2s;
-}
-
-.lang-dropdown:focus,
-.lang-dropdown:hover {
-    border-color: var(--mint);
-}

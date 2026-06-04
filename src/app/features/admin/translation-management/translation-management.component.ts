@@ -1,0 +1,127 @@
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { TranslationAdminService, InterfazTraduccionModel } from '../../../core/services/translation-admin.service';
+import { IdiomaConfigService } from '../../../core/services/idioma-config.service';
+
+@Component({
+  selector: 'app-translation-management',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './translation-management.component.html',
+  styleUrl: './translation-management.component.css'
+})
+export class TranslationManagementComponent implements OnInit {
+  private translationService = inject(TranslationAdminService);
+  private idiomaService = inject(IdiomaConfigService);
+
+  public idiomaFiltro = signal<string>('es');
+  public terminoBusqueda = signal<string>('');
+  public isLoading = signal<boolean>(false);
+
+  public mostrarModal = signal<boolean>(false);
+  public nuevaClave = '';
+  public nuevoValor = '';
+
+  public idiomasDisponibles = this.idiomaService.idiomasDisponibles;
+
+  public traduccionesFiltradas = computed(() => {
+    const codigoFiltro = this.idiomaFiltro();
+    const buscar = this.terminoBusqueda().toLowerCase().trim();
+
+    let resultado = this.translationService.catalogoTraducciones().filter(
+      t => t.lenguaje_codigo === codigoFiltro
+    );
+
+    if (buscar) {
+      resultado = resultado.filter(t =>
+        t.clave.toLowerCase().includes(buscar) ||
+        t.valor.toLowerCase().includes(buscar)
+      );
+    }
+
+    return resultado;
+  });
+
+  ngOnInit() {
+    this.cargarDatos();
+  }
+
+  cargarDatos() {
+    this.isLoading.set(true);
+    this.translationService.obtenerCatalogo().subscribe({
+      next: () => this.isLoading.set(false),
+      error: () => this.isLoading.set(false)
+    });
+  }
+
+  cambiarFiltroIdioma(codigo: string) {
+    this.idiomaFiltro.set(codigo);
+  }
+
+  actualizarBusqueda(texto: string) {
+    this.terminoBusqueda.set(texto);
+  }
+
+  guardarCambioEnLinea(item: InterfazTraduccionModel, nuevoTexto: string) {
+    if (item.valor === nuevoTexto) return;
+
+    const payload: InterfazTraduccionModel = {
+      id: item.id,
+      clave: item.clave,
+      valor: nuevoTexto,
+      lenguaje_codigo: item.lenguaje_codigo
+    };
+
+    this.translationService.actualizarLiteral(payload).subscribe({
+      error: () => this.cargarDatos()
+    });
+  }
+
+  abrirModalCrear() {
+    this.nuevaClave = '';
+    this.nuevoValor = '';
+    this.mostrarModal.set(true);
+  }
+
+  cerrarModal() {
+    this.mostrarModal.set(false);
+  }
+
+  crearNuevaTraduccion() {
+    if (!this.nuevaClave || !this.nuevoValor) {
+      alert('Debes rellenar tanto la clave identificadora como el texto.');
+      return;
+    }
+
+    const payload: InterfazTraduccionModel = {
+      clave: this.nuevaClave.trim(),
+      valor: this.nuevoValor,
+      lenguaje_codigo: this.idiomaFiltro()
+    };
+
+    this.isLoading.set(true);
+    this.translationService.actualizarLiteral(payload).subscribe({
+      next: () => {
+        this.cerrarModal();
+        this.cargarDatos();
+      },
+      error: () => this.isLoading.set(false)
+    });
+  }
+
+  eliminarClaveDiccionario(clave: string) {
+    const confirmar = confirm(`¿Estás seguro de que deseas eliminar permanentemente la clave "${clave}" y todas sus traducciones asociadas?`);
+
+    if (!confirmar) return;
+
+    this.isLoading.set(true);
+    this.translationService.eliminarLiteral(clave).subscribe({
+      next: () => this.isLoading.set(false),
+      error: (err) => {
+        this.isLoading.set(false);
+        alert('Fallo al purgar el literal del núcleo del sistema.');
+      }
+    });
+  }
+}

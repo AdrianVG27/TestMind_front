@@ -44,12 +44,7 @@
         }
 
         <div class="lang-selector">
-            <select [value]="langActivo" (change)="cambiarIdioma($any($event.target).value)"
-                class="lang-dropdown font-pixel">
-                <option value="es">Castellano</option>
-                <option value="gl">Galego</option>
-                <option value="en">English</option>
-            </select>
+            <app-lang-selector></app-lang-selector>
         </div>
     </div>
 </nav>

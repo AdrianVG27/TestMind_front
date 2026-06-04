@@ -17,7 +17,7 @@ export const roleGuard: CanActivateFn = (route) => {
     return router.parseUrl(user.Role === 'admin' ? '/admin/dashboard' : '/reader');
   }
 
-  if (requiredPlan && user.Plan === 'free' && requiredPlan !== 'free') {
+  if (requiredPlan && user.Plan === 'FREE' && requiredPlan !== 'FREE') {
     return router.parseUrl('/upgrade');
   }
 

@@ -16,12 +16,20 @@ export class AuthService {
   currentUser = computed(() => this.userState());
   isAuthenticated = computed(() => !!this.userState());
   isAdmin = computed(() => this.userState()?.Role === 'admin');
-  userPlan = computed(() => this.userState()?.Plan || 'free');
+  userPlan = computed(() => this.userState()?.Plan || 'FREE');
+
+  constructor() {
+    if (this.getToken()) {
+      this.obtenerUsuarioAutenticado().subscribe({
+        error: (err) => console.error('Error sincronizando estado al refrescar:', err)
+      });
+    }
+  }
 
   register(data: any) {
     return this.http.post<any>('/api/register', data).pipe(
       tap(res => {
-        this.setSession(res.access_token, res.user, 'user');
+        this.setSession(res.access_token, res.data, 'user');
       })
     );
   }
@@ -38,9 +46,20 @@ export class AuthService {
     return localStorage.getItem('tm_token');
   }
 
-  setSession(token: string, userData: any, role: string) {
-    localStorage.setItem('tm_token', token);
-    const userToSave = { ...userData, Role: role, Plan: userData.plan || 'free' };
+  setSession(token: string | null, userData: any, role: string) {
+    if (token) {
+      localStorage.setItem('tm_token', token);
+    }
+
+    const userToSave: User = {
+      Id: userData.id,
+      Name: userData.name,
+      Nickname: userData.nickname || '',
+      Email: userData.email,
+      Role: role as UserRole,
+      Plan: userData.plan ? userData.plan.toUpperCase() : 'FREE'
+    };
+
     localStorage.setItem('tm_user', JSON.stringify(userToSave));
     this.userState.set(userToSave);
   }
@@ -57,7 +76,6 @@ export class AuthService {
         localStorage.removeItem('tm_user');
 
         this.userState.set(null);
-
         this.router.navigate(['/home']);
       }
     });
@@ -69,18 +87,9 @@ export class AuthService {
   }
 
   obtenerUsuarioAutenticado(): Observable<any> {
-    return this.http.get<{ data: any; role: string; type: string }>('/api/me').pipe(
+    return this.http.get<{ data: any; role: string }>('/api/me').pipe(
       tap(res => {
-        const userToSave = {
-          Id: res.data.id,
-          Name: res.data.name,
-          Nickname: res.data.nickname,
-          Email: res.data.email,
-          Role: res.role as UserRole,
-          Plan: res.data.plan || 'free'
-        };
-        localStorage.setItem('tm_user', JSON.stringify(userToSave));
-        this.userState.set(userToSave);
+        this.setSession(null, res.data, res.role);
       })
     );
   }
@@ -90,7 +99,7 @@ export class AuthService {
       tap(res => {
         const current = this.userState();
         if (current) {
-          const updatedUser = { ...current, name: res.user.name, email: res.user.name };
+          const updatedUser = { ...current, Name: res.user.name, Email: res.user.email };
           localStorage.setItem('tm_user', JSON.stringify(updatedUser));
           this.userState.set(updatedUser);
         }

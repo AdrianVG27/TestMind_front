@@ -6,4 +6,5 @@ export const USER_ROUTES: Routes = [
     { path: 'result', loadComponent: () => import('./test-result/test-result.component').then(c => c.TestResultComponent) },
     { path: 'attempts', loadComponent: () => import('./intento-list/intento-list.component').then(c => c.IntentoListComponent) },
     { path: 'history', loadComponent: () => import('./test-edit-list/test-edit-list.component').then(c => c.TestEditListComponent) },
+    { path: 'suscriptions', loadComponent: () => import('./suscription-list/suscription-list.component').then(c => c.SuscriptionListComponent) },
 ];

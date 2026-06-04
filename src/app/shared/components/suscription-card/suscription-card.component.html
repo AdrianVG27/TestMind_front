@@ -1,0 +1,66 @@
+<div class="tm-card voxel-card" [ngClass]="{
+        'tm-shadow-blue tier-free': !plan.paypal_id,
+        'tm-shadow-mint tier-premium': plan.paypal_id && plan.conf.precio <= 5,
+        'tm-shadow-cyan tier-premium-plus': plan.paypal_id && plan.conf.precio > 5
+     }">
+
+    <div class="tier-header">
+        <h3 class="font-vcr">{{ plan.descripcion || plan.codigo }}</h3>
+        <span class="price-tag font-pixel">
+            @if (plan.conf.precio === 0) {
+            GRATIS_
+            } @else {
+            {{ plan.conf.precio | currency:'EUR':'symbol':'1.0-2' }}/mes
+            }
+        </span>
+    </div>
+
+    <ul class="tier-features font-pixel">
+        <li>Generación: {{ plan.conf.maxTests }} tests / 24h</li>
+        <li>
+            Exportación:
+            @if (plan.conf.maxExportaciones >= 99999) { Ilimitada }
+            @else if (plan.conf.maxExportaciones === 0) { No disponible }
+            @else { {{ plan.conf.maxExportaciones }} / 24h }
+        </li>
+        <li>Límite: {{ plan.conf.maxPaginas }} pág. por PDF</li>
+        <li>IA: {{ plan.conf.maxPreguntas }} preguntas por test</li>
+    </ul>
+
+    <div class="tier-action-zone">
+        @if (currentUserPlan() === plan.codigo.toUpperCase()) {
+        <div class="active-plan-container font-pixel">
+            <span class="category-tag default-plan-tag">PLAN_ACTIVO_</span>
+
+            @if (plan.codigo.toUpperCase() !== 'FREE') {
+            <button class="btn-voxel-cancel" (click)="abrirModal()">
+                CANCELAR_SUSCRIPCION_
+            </button>
+            }
+        </div>
+        } @else {
+        @if (plan.codigo.toUpperCase() !== 'FREE') {
+        <div #paypalButtonContainer [id]="'paypal-btn-' + plan.codigo.toLowerCase()" class="paypal-render-box">
+        </div>
+        }
+        }
+    </div>
+</div>
+
+@if (mostrarModalCancelacion()) {
+<div class="voxel-modal-overlay">
+    <div class="voxel-modal-box tm-shadow-red animate-fade-in">
+        <div class="voxel-modal-header font-vcr">
+            <h4>¡ADVERTENCIA_SISTEMA!</h4>
+        </div>
+        <div class="voxel-modal-body font-pixel">
+            <p>¿Confirmas que deseas cancelar tu suscripción a TestMind?</p>
+            <p class="txt-warning">Conservarás tus ventajas hasta el final del periodo de facturación actual.</p>
+        </div>
+        <div class="voxel-modal-actions font-pixel">
+            <button class="btn-modal-back" (click)="cerrarModal()">VOLVER_</button>
+            <button class="btn-modal-confirm" (click)="confirmarBajaSuscripcion()">CONFIRMAR_BAJA_</button>
+        </div>
+    </div>
+</div>
+}

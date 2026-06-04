@@ -33,7 +33,7 @@
         <button (click)="logout()" class="btn-logout font-vcr">
             {{ 'nav.logout' | transloco }}
         </button>
-        <span class="plan-tag font-pixel">{{ userPlan() }}</span>
+        <span routerLink="/suscriptions" class="plan-tag font-pixel">{{ userPlan() | getTier: listaPlanes() }}</span>
         <a routerLink="/profile" routerLinkActive="active-link" class="nav-item btn-profile">
             {{ 'nav.profile' | transloco }}
         </a>

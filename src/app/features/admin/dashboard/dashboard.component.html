@@ -1,22 +1,52 @@
 <div class="admin-dashboard-layout">
     <h1 class="font-vcr pixel-title">CORE_ADMIN_PANEL // METRICS</h1>
 
-    <div class="metrics-grid">
-        <section class="tm-card tm-shadow-blue local-panel-padding chart-card">
+    <div class="tm-metrics-grid">
+
+        <section class="tm-card tm-shadow-blue tm-chart-card">
             <header class="panel-header">
                 <h3 class="font-vcr">SEGMENTACIÓN DE USUARIOS (PLANES)</h3>
             </header>
-
-            <div class="chart-container-wrapper">
+            <div class="tm-chart-wrapper">
                 @if (isVisualLoading() && chartLabels().length === 0) {
-                <div class="empty-list-notice font-pixel animate-pulse">
+                <div class="load-notice font-pixel animate-pulse">
                     CONECTANDO CON EL REGISTRO DE MEMBRESÍAS...
                 </div>
                 } @else {
-                <app-pie-chart [labels]="chartLabels()" [data]="chartData()">
-                </app-pie-chart>
+                <app-pie-chart [labels]="chartLabels()" [data]="chartData()"></app-pie-chart>
                 }
             </div>
         </section>
+
+        <section class="tm-card tm-shadow-blue tm-chart-card">
+            <header class="panel-header">
+                <h3 class="font-vcr">DISTRIBUCIÓN DE TESTS POR CATEGORÍA</h3>
+            </header>
+            <div class="tm-chart-wrapper">
+                @if (isVisualLoading() && categoriasLabels().length === 0) {
+                <div class="load-notice font-pixel animate-pulse">
+                    EXTRAYENDO VOLUMEN DE CATEGORÍAS...
+                </div>
+                } @else {
+                <app-pie-chart [labels]="categoriasLabels()" [data]="categoriasData()"></app-pie-chart>
+                }
+            </div>
+        </section>
+
+        <section class="tm-card tm-shadow-mint tm-chart-card tm-chart-full-width">
+            <header class="panel-header">
+                <h3 class="font-vcr highlight-mint">EVOLUCIÓN: TESTS CREADOS</h3>
+            </header>
+            <div class="tm-chart-wrapper">
+                @if (isVisualLoading() && creadosLabels().length === 0) {
+                <div class="load-notice font-pixel animate-pulse alert-mint-border">
+                    SINCRONIZANDO HISTÓRICO DE CREACIÓN...
+                </div>
+                } @else {
+                <app-line-chart [labels]="creadosLabels()" [data]="creadosData()"></app-line-chart>
+                }
+            </div>
+        </section>
+
     </div>
 </div>

@@ -1,11 +1,12 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { PieChartComponent } from '../../../shared/components/pie-chart/pie-chart.component';
+import { LineChartComponent } from '../../../shared/components/line-chart/line-chart.component'; // 🚀 Importación del nuevo componente
 import { AdminMetricService } from '../../../core/services/admin-metric.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [PieChartComponent],
+  imports: [PieChartComponent, LineChartComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -15,22 +16,42 @@ export class DashboardComponent {
   public chartLabels = computed(() => this.metricService.segmentacionUsuarios()?.labels || []);
   public chartData = computed(() => this.metricService.segmentacionUsuarios()?.data || []);
 
+  public creadosLabels = computed(() => this.metricService.testsCreadosHistorico()?.labels || []);
+  public creadosData = computed(() => this.metricService.testsCreadosHistorico()?.data || []);
+
+  public categoriasLabels = computed(() => this.metricService.testsPorCategoria()?.labels || []);
+  public categoriasData = computed(() => this.metricService.testsPorCategoria()?.data || []);
+
   public isVisualLoading = signal<boolean>(false);
 
   ngOnInit() {
-    this.cargarMetricasSegmentacion();
+    this.cargarMetricasDashboard();
   }
 
-  cargarMetricasSegmentacion() {
+  cargarMetricasDashboard() {
     this.isVisualLoading.set(true);
 
     this.metricService.obtenerSegmentacionUsuarios().subscribe({
-      next: () => {
-        this.isVisualLoading.set(false);
-      },
+      next: () => this.isVisualLoading.set(false),
       error: (err) => {
-        this.isVisualLoading.set(true); // Bloqueo visual por fallo crítico d sincronización
+        this.isVisualLoading.set(false);
         console.error('Fallo en TestMind Admin Core al actualizar el pipeline d analíticas', err);
+      }
+    });
+
+    this.metricService.obtenerTestsPorCategoria().subscribe({
+      next: () => this.isVisualLoading.set(false),
+      error: (err) => {
+        this.isVisualLoading.set(false);
+        console.error('Fallo al actualizar pipeline de distribución por categorías', err);
+      }
+    });
+
+    this.metricService.obtenerHistoricoTestsCreados().subscribe({
+      next: () => this.isVisualLoading.set(false),
+      error: (err) => {
+        this.isVisualLoading.set(false);
+        console.error('Fallo en TestMind Admin Core al actualizar el pipeline de actividad temporal', err);
       }
     });
   }

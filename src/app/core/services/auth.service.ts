@@ -94,14 +94,22 @@ export class AuthService {
     );
   }
 
-  updateProfile(profileData: { name: string; email: string; password?: string }) {
-    return this.http.put<any>('/api/user/profile', profileData).pipe(
+  updateProfile(profileData: { name: string; email: string; nickname: string; password?: string }) {
+    return this.http.post<any>('/api/user/update', profileData).pipe(
       tap(res => {
         const current = this.userState();
-        if (current) {
-          const updatedUser = { ...current, Name: res.user.name, Email: res.user.email };
+        if (current && res && res.user) {
+          const updatedUser = {
+            ...current,
+            Name: res.user.name,
+            Email: res.user.email,
+            Nickname: res.user.nickname
+          };
+
           localStorage.setItem('tm_user', JSON.stringify(updatedUser));
           this.userState.set(updatedUser);
+
+          console.log("¡Signal userState actualizado en vivo con:", updatedUser);
         }
       })
     );

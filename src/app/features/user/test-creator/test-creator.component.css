@@ -4,67 +4,6 @@
     padding: 2.5rem;
 }
 
-.form-row-2,
-.form-row-3 {
-    display: grid;
-    gap: 1.25rem;
-    margin-bottom: 1.25rem;
-}
-
-.form-row-2 {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-}
-
-.form-row-3 {
-    grid-template-columns: 1fr 1fr 1fr;
-}
-
-.align-center {
-    align-items: center;
-}
-
-.no-margin {
-    margin: 0 !important;
-}
-
-.full-width-row {
-    grid-column: 1 / -1;
-}
-
-.pixel-divider {
-    border: 0;
-    border-top: 2px dashed var(--border-subtle);
-    margin: 1.5rem 0;
-}
-
-.pixel-textarea {
-    background: var(--bg-main);
-    border-radius: 4px;
-    color: var(--text-main);
-    width: 100%;
-}
-
-.pixel-textarea {
-    height: 90px;
-    border: 2px solid var(--border-blue);
-    padding: 0.75rem;
-    outline: none;
-    resize: none;
-    transition: border-color 0.2s;
-}
-
-.pixel-textarea:focus {
-    border-color: var(--mint);
-}
-
-.input-readonly {
-    background-color: #1A202C !important;
-    color: var(--text-muted) !important;
-    border-color: var(--border-subtle) !important;
-    cursor: not-allowed;
-}
-
 .document-source-toggle {
     display: flex;
     border: 2px solid var(--border-blue);
@@ -107,51 +46,6 @@
     font-size: 0.9rem;
 }
 
-@keyframes pulse {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.6;
-    }
-}
-
-.animate-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-.space-top {
-    margin-top: 1.25rem;
-}
-
-.btn-reintento {
-    background-color: #E2E8F0 !important;
-    color: #1A202C !important;
-    box-shadow: 4px 4px 0px var(--error) !important;
-}
-
-.btn-reintento:hover {
-    background-color: var(--error) !important;
-    color: #FFF !important;
-}
-
-.btn-info-readonly {
-    background-color: var(--border-blue) !important;
-    color: #FFF !important;
-    box-shadow: 4px 4px 0px var(--border-subtle) !important;
-}
-
-fieldset[disabled] .pixel-input,
-fieldset[disabled] .pixel-select,
-fieldset[disabled] .pixel-textarea {
-    opacity: 0.6;
-    cursor: not-allowed;
-    background-color: #141b24;
-}
-
 .gift-modal-content {
     max-width: 800px;
     height: auto;
@@ -180,8 +74,4 @@ fieldset[disabled] .pixel-textarea {
     width: auto;
     padding: 0.75rem 1.5rem;
     margin-top: 0;
-}
-
-.no-margin-top {
-    margin-top: 0 !important;
 }

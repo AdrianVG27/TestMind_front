@@ -15,8 +15,7 @@
 
     <form (ngSubmit)="onFormSubmit()" class="modal-form">
 
-        <fieldset [disabled]="isProcessing() || isReadOnlyMode()"
-            style="border: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.2rem;">
+        <fieldset [disabled]="isProcessing() || isReadOnlyMode()" class="tm-fieldset">
 
             @if (!isReadOnlyMode()) {
             <div class="document-source-toggle space-bottom">
@@ -146,8 +145,7 @@
         </div>
         }
 
-        <fieldset [disabled]="isProcessing() || isReadOnlyMode()"
-            style="border: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.2rem;">
+        <fieldset [disabled]="isProcessing() || isReadOnlyMode()" class="tm-fieldset">
             <hr class="pixel-divider">
 
             <div class="form-row-3">

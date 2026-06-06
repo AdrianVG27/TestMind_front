@@ -118,4 +118,8 @@ export class AuthService {
   registerAdmin(adminData: any): Observable<any> {
     return this.http.post<any>('/api/admin/register', adminData);
   }
+
+  updateAdminPassword(payload: { current_password: string; password: string; password_confirmation: string }): Observable<any> {
+    return this.http.post<any>('/api/admin/update', payload);
+  }
 }

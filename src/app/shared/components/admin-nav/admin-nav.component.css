@@ -100,3 +100,7 @@
 .lang-selector {
     margin-left: 5px;
 }
+
+.active-conf {
+    color: var(--mint);
+}

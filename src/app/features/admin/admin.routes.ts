@@ -5,4 +5,5 @@ export const ADMIN_ROUTES: Routes = [
     { path: 'support-tables-management', loadComponent: () => import('./gestion-ta/gestion-ta.component').then(c => c.GestionTAComponent) },
     { path: 'languages-management', loadComponent: () => import('./translation-management/translation-management.component').then(c => c.TranslationManagementComponent) },
     { path: 'new-admin', loadComponent: () => import('./new-admin/new-admin.component').then(c => c.NewAdminComponent) },
+    { path: 'reset-password', loadComponent: () => import('./admin-password/admin-password.component').then(c => c.AdminPasswordComponent) },
 ];

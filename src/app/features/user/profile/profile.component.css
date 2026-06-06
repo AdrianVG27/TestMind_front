@@ -55,22 +55,6 @@
     font-weight: bold;
 }
 
-.btn-config {
-    background: none;
-    border: 2px solid var(--border-blue);
-    color: #FFF;
-    padding: .75rem 1.2rem;
-    border-radius: 4px;
-    transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.2s;
-}
-
-.btn-config:hover {
-    border-color: var(--mint);
-    color: var(--mint);
-    transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0px var(--border-blue);
-}
-
 .password-fieldset {
     border: 1px dashed var(--border-subtle);
     padding: 1rem;

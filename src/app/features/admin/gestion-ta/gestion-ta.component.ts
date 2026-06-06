@@ -27,6 +27,8 @@ export class GestionTAComponent {
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
 
+  erroresValidacion = signal<any>(null);
+
   isModalAbierta = signal<boolean>(false);
   filaParaModal = signal<any | null>(null);
   traduccionesCargadas = signal<any[]>([]);
@@ -44,9 +46,9 @@ export class GestionTAComponent {
   isBorradoProhibido = computed(() => {
     const tabla = this.tablaActiva();
     const idFila = this.idFilaParaBorrar();
-    
+
     if (!tabla || !idFila) return false;
-    
+
     if (tabla.tabla.toLowerCase() === 'tablaapoyo') {
       const fila = tabla.registros.find((r: any) => r.id === idFila);
       if (fila && fila.nombreTA && fila.nombreTA.toLowerCase() === 'tablaapoyo') {
@@ -149,6 +151,8 @@ export class GestionTAComponent {
     if (!idTabla || !payload) return;
 
     this.isProcessing.set(true);
+    this.limpiarMensajes();
+
     this.apiService.crearRegistro(idTabla, payload).subscribe({
       next: (res) => {
         this.successMessage.set(res.message || 'Nuevo registro inyectado correctamente.');
@@ -158,7 +162,11 @@ export class GestionTAComponent {
       },
       error: (err) => {
         this.isProcessing.set(false);
-        this.errorMessage.set(err.error?.error || 'Error al persistir el nuevo registro auxiliar.');
+        if (err.status === 422) {
+          this.erroresValidacion.set(err.error?.errors);
+        } else if (err.status !== 500 && err.status !== 401 && err.status !== 0 && err.status !== 403) {
+          this.errorMessage.set(err.error?.error || 'Error al persistir el nuevo registro auxiliar.');
+        }
       }
     });
   }
@@ -195,6 +203,8 @@ export class GestionTAComponent {
     if (!idTabla || !idFila || !payload) return;
 
     this.isProcessing.set(true);
+    this.limpiarMensajes(); // 🧹 Limpiar antes de guardar
+
     this.apiService.actualizarRegistro(idTabla, idFila, payload).subscribe({
       next: (res) => {
         this.successMessage.set(res.message || 'Registro actualizado con éxito.');
@@ -203,7 +213,11 @@ export class GestionTAComponent {
       },
       error: (err) => {
         this.isProcessing.set(false);
-        this.errorMessage.set(err.error?.error || 'Error al procesar la actualización.');
+        if (err.status === 422) {
+          this.erroresValidacion.set(err.error?.errors);
+        } else if (err.status !== 500 && err.status !== 401 && err.status !== 0 && err.status !== 403) {
+          this.errorMessage.set(err.error?.error || 'Error al procesar la actualización.');
+        }
       }
     });
   }
@@ -237,7 +251,9 @@ export class GestionTAComponent {
       error: (err) => {
         this.isProcessing.set(false);
         this.idFilaParaBorrar.set(null);
-        this.errorMessage.set(err.error?.error || 'No se pudo borrar la fila. Comprueba si está siendo usada como llave foránea.');
+        if (err.status !== 500 && err.status !== 401 && err.status !== 0 && err.status !== 403) {
+          this.errorMessage.set(err.error?.error || 'No se pudo borrar la fila. Comprueba si está siendo usada como llave foránea.');
+        }
       }
     });
   }
@@ -298,7 +314,9 @@ export class GestionTAComponent {
       },
       error: (err) => {
         this.isProcessing.set(false);
-        this.errorMessage.set(err.error?.error || 'Error crítico al actualizar las traducciones.');
+        if (err.status !== 500 && err.status !== 401 && err.status !== 0 && err.status !== 403) {
+          this.errorMessage.set(err.error?.error || 'Error crítico al actualizar las traducciones.');
+        }
       }
     });
   }
@@ -306,5 +324,6 @@ export class GestionTAComponent {
   private limpiarMensajes() {
     this.errorMessage.set(null);
     this.successMessage.set(null);
+    this.erroresValidacion.set(null);
   }
 }

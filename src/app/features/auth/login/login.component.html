@@ -11,11 +11,23 @@
                 <span class="font-pixel label-style">{{ 'auth.email' | transloco }}</span>
                 <input type="email" [(ngModel)]="credentials.email" name="email" required
                     class="pixel-input font-pixel">
+                
+                @if (erroresValidacion()?.email) {
+                    <small class="pixel-validation-error animate-pulse">
+                        {{ erroresValidacion().email[0] }}
+                    </small>
+                }
             </div>
 
             <div class="form-field">
                 <span class="font-pixel label-style">{{ 'auth.password' | transloco }}</span>
                 <input type="password" [(ngModel)]="credentials.password" name="password" required class="pixel-input">
+                
+                @if (erroresValidacion()?.password) {
+                    <small class="pixel-validation-error animate-pulse">
+                        {{ erroresValidacion().password[0] }}
+                    </small>
+                }
             </div>
 
             <div class="remember-field">

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -27,7 +27,13 @@ export class RegisterComponent {
     password_confirmation: ''
   };
 
+  errorMessage = signal<string | null>(null);
+  erroresValidacion = signal<any>(null);
+
   handleRegister() {
+    this.errorMessage.set(null);
+    this.erroresValidacion.set(null);
+
     this.auth.register(this.form).subscribe({
       next: (res) => {
         if (this.hayTestPendiente) {
@@ -37,7 +43,12 @@ export class RegisterComponent {
         }
       },
       error: (err) => {
-        console.error('Error durante el auto-registro académico:', err);
+        if (err.status === 422) {
+          this.erroresValidacion.set(err.error?.errors);
+        }
+        else if (err.status !== 500 && err.status !== 401 && err.status !== 0) {
+          this.errorMessage.set(err.error?.message || 'Error al intentar crear la cuenta.');
+        }
       }
     });
   }

@@ -23,6 +23,8 @@ export class TranslationManagementComponent implements OnInit {
   public nuevaClave = '';
   public nuevoValor = '';
 
+  public erroresValidacion = signal<any>(null);
+
   public idiomasDisponibles = this.idiomaService.idiomasDisponibles;
 
   public traduccionesFiltradas = computed(() => {
@@ -81,6 +83,7 @@ export class TranslationManagementComponent implements OnInit {
   abrirModalCrear() {
     this.nuevaClave = '';
     this.nuevoValor = '';
+    this.erroresValidacion.set(null);
     this.mostrarModal.set(true);
   }
 
@@ -89,10 +92,7 @@ export class TranslationManagementComponent implements OnInit {
   }
 
   crearNuevaTraduccion() {
-    if (!this.nuevaClave || !this.nuevoValor) {
-      alert('Debes rellenar tanto la clave identificadora como el texto.');
-      return;
-    }
+    this.erroresValidacion.set(null);
 
     const payload: InterfazTraduccionModel = {
       clave: this.nuevaClave.trim(),
@@ -106,7 +106,12 @@ export class TranslationManagementComponent implements OnInit {
         this.cerrarModal();
         this.cargarDatos();
       },
-      error: () => this.isLoading.set(false)
+      error: (err) => {
+        this.isLoading.set(false);
+        if (err.status === 422) {
+          this.erroresValidacion.set(err.error?.errors);
+        }
+      }
     });
   }
 
@@ -118,9 +123,8 @@ export class TranslationManagementComponent implements OnInit {
     this.isLoading.set(true);
     this.translationService.eliminarLiteral(clave).subscribe({
       next: () => this.isLoading.set(false),
-      error: (err) => {
+      error: () => {
         this.isLoading.set(false);
-        alert('Fallo al purgar el literal del núcleo del sistema.');
       }
     });
   }

@@ -80,17 +80,30 @@
                     <label class="font-vcr">IDENTIFICADOR (CLAVE DOT-NOTATION):</label>
                     <input type="text" [(ngModel)]="nuevaClave" placeholder="ej: auth.welcome_message"
                         class="inline-edit-input" />
+
+                    @if (erroresValidacion()?.clave) {
+                    <small class="pixel-validation-error animate-pulse" style="margin-top: 0.4rem;">
+                        {{ erroresValidacion().clave[0] }}
+                    </small>
+                    }
                 </div>
                 <div class="form-group">
                     <label class="font-vcr">CONTENIDO TEXTUAL (VALOR):</label>
                     <input type="text" [(ngModel)]="nuevoValor" placeholder="Texto que se renderizará..."
                         class="inline-edit-input" />
+
+                    @if (erroresValidacion()?.valor) {
+                    <small class="pixel-validation-error animate-pulse" style="margin-top: 0.4rem;">
+                        {{ erroresValidacion().valor[0] }}
+                    </small>
+                    }
                 </div>
             </div>
 
             <footer class="modal-footer">
                 <button (click)="cerrarModal()" class="btn-cancel font-vcr">CANCELAR</button>
-                <button (click)="crearNuevaTraduccion()" class="btn-action-cyber font-vcr">INYECTAR EN CORE</button>
+                <button (click)="crearNuevaTraduccion()" [disabled]="isLoading()"
+                    class="btn-action-cyber font-vcr">INYECTAR EN CORE</button>
             </footer>
         </div>
     </div>

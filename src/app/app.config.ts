@@ -7,6 +7,7 @@ import { TranslocoHttpLoader } from './transloco-loader';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { languageInterceptor } from './core/interceptors/language.interceptor';
 import { IdiomaConfigService } from './core/services/idioma-config.service';
+import { errorInterceptor } from './core/interceptors/error.interceptor';
 
 export function inicializarIdiomasBaseDatos(idiomaService: IdiomaConfigService) {
   return () => idiomaService.cargarIdiomasDesdeBD();
@@ -19,7 +20,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([
         authInterceptor,
-        languageInterceptor
+        languageInterceptor,
+        errorInterceptor
       ])
     ),
     {

@@ -16,7 +16,7 @@
         <div class="hero-info">
             <h1>{{ usuario.Name }} <span class="nickname-span font-pixel">{{ '@' + usuario.Nickname }}</span></h1>
             <p class="user-email">{{ usuario.Email }}</p>
-            <span class="user-badge-plan font-vcr">{{ authService.userPlan() | getTier: tiers()  }}</span>
+            <span class="user-badge-plan font-vcr">{{ authService.userPlan() | getTier: tiers() }}</span>
         </div>
         <button class="btn-config font-vcr" (click)="abrirModal()">
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 2048 2048"
@@ -57,9 +57,11 @@
                 <div class="tm-list-row" (click)="irACorrecion(intento.id)">
                     <div class="row-main">
                         <span class="row-title">{{ intento.test?.titulo || 'Cuestionario Eliminado' }}</span>
-                        <span class="row-subtitle font-vcr">{{ intento.test?.documento?.categoria?.nombre_traducido || 'General' }}</span>
+                        <span class="row-subtitle font-vcr">{{ intento.test?.documento?.categoria?.nombre_traducido ||
+                            'General' }}</span>
                     </div>
-                    <span class="row-badge font-pixel" [class.badge-pass]="intento.nota >= 5" [class.badge-fail]="intento.nota < 5">
+                    <span class="row-badge font-pixel" [class.badge-pass]="intento.nota >= 5"
+                        [class.badge-fail]="intento.nota < 5">
                         {{ intento.nota }}
                     </span>
                 </div>
@@ -79,9 +81,13 @@
                 <div class="tm-list-row" (click)="irAEdicion(test.id)">
                     <div class="row-main">
                         <span class="row-title">{{ test.titulo }}</span>
-                        <span class="row-subtitle font-vcr">{{ test.categoria_codigo | getCategoria: categorias() }}</span>
+                        <span class="row-subtitle font-vcr">{{ test.categoria_codigo | getCategoria: categorias()
+                            }}</span>
                     </div>
-                    <span class="row-badge badge-neutral font-vcr" [class.badge-pass]="test.estado_codigo == 'C'" [class.badge-neutral]="test.estado_codigo == 'P' || test.estado_codigo == 'EP'" [class.badge-fail]="test.estado_codigo == 'E'">{{ test.estado_codigo | getEstado: estados() }}</span>
+                    <span class="row-badge badge-neutral font-vcr" [class.badge-pass]="test.estado_codigo == 'C'"
+                        [class.badge-neutral]="test.estado_codigo == 'P' || test.estado_codigo == 'EP'"
+                        [class.badge-fail]="test.estado_codigo == 'E'">{{ test.estado_codigo | getEstado: estados()
+                        }}</span>
                 </div>
                 } @empty {
                 <div class="empty-list-notice font-pixel">Aún no has generado tests</div>
@@ -99,29 +105,54 @@
                 <button class="btn-close-modal" (click)="mostrarModalConfig.set(false)">✕</button>
             </header>
             <form class="modal-form" (ngSubmit)="guardarCambiosPerfil()">
+
                 @if (msjError()) {
                 <div class="error-notice">{{ msjError() }}</div>
                 }
+
                 <label class="form-field">
                     <span>Nombre Completo</span>
                     <input type="text" [(ngModel)]="editForm().Name" name="name" required
                         class="pixel-input font-pixel" />
+                    @if (erroresValidacion()?.name) {
+                    <small class="pixel-validation-error animate-pulse">
+                        {{ erroresValidacion().name[0] }}
+                    </small>
+                    }
                 </label>
+
                 <label class="form-field">
                     <span>Nickname</span>
                     <input type="text" [(ngModel)]="editForm().Nickname" name="nickname" required
                         class="pixel-input font-pixel" />
+                    @if (erroresValidacion()?.nickname) {
+                    <small class="pixel-validation-error animate-pulse">
+                        {{ erroresValidacion().nickname[0] }}
+                    </small>
+                    }
                 </label>
+
                 <label class="form-field">
                     <span>Correo Electrónico</span>
                     <input type="email" [(ngModel)]="editForm().Email" name="email" required class="pixel-input" />
+                    @if (erroresValidacion()?.email) {
+                    <small class="pixel-validation-error animate-pulse">
+                        {{ erroresValidacion().email[0] }}
+                    </small>
+                    }
                 </label>
+
                 <fieldset class="password-fieldset">
                     <legend class="font-pixel">Cambiar Contraseña (Opcional)</legend>
                     <label class="form-field">
                         <span>Nueva Contraseña</span>
                         <input type="password" [(ngModel)]="editForm().password" name="password" class="pixel-input"
                             autocomplete="new-password" />
+                        @if (erroresValidacion()?.password) {
+                        <small class="pixel-validation-error animate-pulse">
+                            {{ erroresValidacion().password[0] }}
+                        </small>
+                        }
                     </label>
                     <label class="form-field">
                         <span>Confirmar Contraseña</span>
@@ -129,6 +160,7 @@
                             name="password_confirmation" class="pixel-input" />
                     </label>
                 </fieldset>
+
                 <footer class="modal-actions">
                     <button type="button" class="btn-cancel" (click)="mostrarModalConfig.set(false)">Cancelar</button>
                     <button type="submit" class="btn-save">Guardar Cambios</button>

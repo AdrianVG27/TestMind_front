@@ -36,6 +36,12 @@
                     <span class="font-pixel label-style">TÍTULO DEL TEST</span>
                     <input type="text" [ngModel]="testForm.titulo()" (ngModelChange)="testForm.titulo.set($event)"
                         name="titulo" required class="pixel-input">
+                    
+                    @if (erroresValidacion()?.titulo) {
+                        <small class="font-pixel animate-pulse pixel-validation-error">
+                            {{ erroresValidacion().titulo[0] }}
+                        </small>
+                    }
                 </div>
 
                 @if (documentSource() === 'upload') {
@@ -49,6 +55,12 @@
                         <option [ngValue]="cat.codigo">{{ cat.descripcion }}</option>
                         }
                     </select>
+
+                    @if (erroresValidacion()?.categoria_codigo) {
+                        <small class="font-pixel animate-pulse pixel-validation-error">
+                            {{ erroresValidacion().categoria_codigo[0] }}
+                        </small>
+                    }
                 </div>
                 } @else {
                 <div class="form-field">
@@ -65,6 +77,12 @@
                     <span class="font-pixel label-style">ARCHIVO PDF (MÁX 12MB)</span>
                     <input type="file" (change)="onFileSelected($event)" accept="application/pdf"
                         class="pixel-file-input font-pixel" required>
+                    
+                    @if (erroresValidacion()?.pdf) {
+                        <small class="font-pixel animate-pulse pixel-validation-error">
+                            {{ erroresValidacion().pdf[0] }}
+                        </small>
+                    }
                 </div>
                 <div class="remember-field">
                     <label class="remember-label font-pixel">
@@ -119,6 +137,12 @@
                 <div class="empty-explorer font-pixel">No se encontraron apuntes asociados.</div>
                 }
             </div>
+
+            @if (erroresValidacion()?.documento_id) {
+                <small class="font-pixel animate-pulse pixel-validation-error center">
+                    {{ erroresValidacion().documento_id[0] }}
+                </small>
+            }
         </div>
         }
 
@@ -135,17 +159,35 @@
                         <option value="medio">MEDIO</option>
                         <option value="dificil">DIFÍCIL</option>
                     </select>
+
+                    @if (erroresValidacion()?.nivel) {
+                        <small class="font-pixel pixel-validation-error">
+                            {{ erroresValidacion().nivel[0] }}
+                        </small>
+                    }
                 </div>
                 <div class="form-field">
                     <span class="font-pixel label-style">TOTAL PREGUNTAS</span>
                     <input type="number" [ngModel]="testForm.total()" (ngModelChange)="testForm.total.set($event)"
                         name="total" min="1" class="pixel-input font-pixel">
+                    
+                    @if (erroresValidacion()?.total) {
+                        <small class="font-pixel pixel-validation-error">
+                            {{ erroresValidacion().total[0] }}
+                        </small>
+                    }
                 </div>
                 <div class="form-field">
                     <span class="font-pixel label-style">MÍN OPCIONES</span>
                     <input type="number" [ngModel]="testForm.min_opciones()"
                         (ngModelChange)="testForm.min_opciones.set($event)" name="min_opciones"
                         class="pixel-input font-pixel">
+
+                    @if (erroresValidacion()?.min_opciones) {
+                        <small class="font-pixel pixel-validation-error">
+                            {{ erroresValidacion().min_opciones[0] }}
+                        </small>
+                    }
                 </div>
             </div>
 
@@ -155,18 +197,36 @@
                     <input type="number" [ngModel]="testForm.prop_unica()"
                         (ngModelChange)="testForm.prop_unica.set($event)" name="prop_unica"
                         class="pixel-input font-pixel">
+
+                    @if (erroresValidacion()?.prop_unica) {
+                        <small class="font-pixel pixel-validation-error">
+                            {{ erroresValidacion().prop_unica[0] }}
+                        </small>
+                    }
                 </div>
                 <div class="form-field">
                     <span class="font-pixel label-style">PROP MULTI (%)</span>
                     <input type="number" [ngModel]="testForm.prop_multi()"
                         (ngModelChange)="testForm.prop_multi.set($event)" name="prop_multi"
                         class="pixel-input font-pixel">
+
+                    @if (erroresValidacion()?.prop_multi) {
+                        <small class="font-pixel pixel-validation-error">
+                            {{ erroresValidacion().prop_multi[0] }}
+                        </small>
+                    }
                 </div>
                 <div class="form-field">
                     <span class="font-pixel label-style">PROP ESCRIBIR (%)</span>
                     <input type="number" [ngModel]="testForm.prop_escribir()"
                         (ngModelChange)="testForm.prop_escribir.set($event)" name="prop_escribir"
                         class="pixel-input font-pixel">
+
+                    @if (erroresValidacion()?.prop_escribir) {
+                        <small class="font-pixel pixel-validation-error">
+                            {{ erroresValidacion().prop_escribir[0] }}
+                        </small>
+                    }
                 </div>
             </div>
 
@@ -175,6 +235,12 @@
                 <textarea [ngModel]="testForm.input_user()" (ngModelChange)="testForm.input_user.set($event)"
                     name="input_user" maxlength="500" class="pixel-textarea font-pixel"
                     placeholder="Ej: Enfócate más en el capítulo 3..."></textarea>
+                
+                @if (erroresValidacion()?.input_user) {
+                    <small class="font-pixel pixel-validation-error">
+                        {{ erroresValidacion().input_user[0] }}
+                    </small>
+                }
             </div>
         </fieldset>
 

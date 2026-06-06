@@ -51,6 +51,12 @@
                                        (input)="actualizarCampoFila(col, $event)" 
                                        [disabled]="isCampoProtegido(col)"
                                        [class.tm-locked-input]="isCampoProtegido(col)" />
+                                
+                                @if (erroresValidacion()?.[col]) {
+                                    <small class="pixel-validation-error" style="margin-top: 0.1rem; display: block; font-size: 1rem;">
+                                        {{ erroresValidacion()[col][0] }}
+                                    </small>
+                                }
                             </div>
                         </td>
                         <td>
@@ -84,6 +90,12 @@
                                        [value]="nuevaFilaData()?.[col]" 
                                        (input)="actualizarCampoNuevaFila(col, $event)" 
                                        [placeholder]="col === 'codigo' ? 'Ej: INF_01...' : 'Escribir...'" />
+                                
+                                @if (erroresValidacion()?.[col]) {
+                                    <small class="pixel-validation-error" style="margin-top: 0.1rem; display: block; font-size: 1rem;">
+                                        {{ erroresValidacion()[col][0] }}
+                                    </small>
+                                }
                             </div>
                         </td>
                         <td>

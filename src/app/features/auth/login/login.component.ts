@@ -23,12 +23,17 @@ export class LoginComponent {
   credentials = { email: '', password: '', remember: false };
   errorMessage = signal<string | null>(null);
 
+  erroresValidacion = signal<any>(null);
+
   cambiarAModalRegistro(event: Event) {
     event.preventDefault();
     this.irARegistro.emit();
   }
 
   handleLogin() {
+    this.errorMessage.set(null);
+    this.erroresValidacion.set(null);
+
     this.auth.login(this.credentials).subscribe({
       next: (res) => {
         if (this.hayTestPendiente) {
@@ -38,7 +43,14 @@ export class LoginComponent {
           this.router.navigate([route]);
         }
       },
-      error: (err) => this.errorMessage.set(err.error.message || 'Error de acceso')
+      error: (err) => {
+        if (err.status === 422) {
+          this.erroresValidacion.set(err.error?.errors);
+        }
+        else if (err.status !== 500 && err.status !== 401 && err.status !== 0) {
+          this.errorMessage.set(err.error?.message || 'Error de acceso. Revisa tus credenciales.');
+        }
+      }
     });
   }
 }

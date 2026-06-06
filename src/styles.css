@@ -973,3 +973,22 @@ button {
     border-color: var(--error) !important;
     background: var(--error-bg) !important;
 }
+
+.pixel-validation-error {
+    color: var(--error);
+    background-color: var(--error-bg);
+    font-family: 'VT323', monospace;
+    font-size: 1.2rem;
+    margin-top: 0.4rem;
+    padding: 0.2rem 0.5rem;
+    display: inline-block;
+    border-left: 3px solid var(--error);
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.6);
+}
+
+.pixel-validation-error.center {
+    text-align: center;
+    display: block;
+    border-left: none;
+    border-bottom: 2px solid var(--error);
+}

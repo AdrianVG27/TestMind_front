@@ -41,6 +41,8 @@ export class TestCreatorComponent {
   statusMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
 
+  erroresValidacion = signal<any>(null);
+
   isExporting = signal<boolean>(false);
   mostrarModalGift = signal<boolean>(false);
   giftContent = signal<string>('');
@@ -119,8 +121,6 @@ export class TestCreatorComponent {
       error: (err) => {
         this.isProcessing.set(false);
         this.statusMessage.set(null);
-        this.errorMessage.set('Error en la sincronización de datos con el servidor.');
-        console.error(err);
       }
     });
   }
@@ -160,6 +160,7 @@ export class TestCreatorComponent {
     if (this.isReadOnlyMode()) return;
     this.documentSource.set(source);
     this.errorMessage.set(null);
+    this.erroresValidacion.set(null);
     if (source === 'upload') {
       this.testForm.documento_id.set(null);
       this.categoriaDelDocumentoSeleccionado.set('');
@@ -178,6 +179,7 @@ export class TestCreatorComponent {
     if (this.isReadOnlyMode()) return;
     this.testForm.documento_id.set(doc.id);
     this.categoriaDelDocumentoSeleccionado.set(this.obtenerNombreCategoria(doc.categoria_codigo));
+    this.erroresValidacion.set(null);
   }
 
   volverAlPerfil() {
@@ -196,7 +198,6 @@ export class TestCreatorComponent {
       },
       error: () => {
         this.statusMessage.set(null);
-        this.errorMessage.set('No se pudo recuperar la previsualización del archivo.');
       }
     });
   }
@@ -211,6 +212,7 @@ export class TestCreatorComponent {
     if (file && file.type === 'application/pdf') {
       this.selectedFile = file;
       this.errorMessage.set(null);
+      this.erroresValidacion.set(null);
     } else {
       this.selectedFile = null;
       this.errorMessage.set('El archivo debe ser un PDF válido.');
@@ -230,6 +232,7 @@ export class TestCreatorComponent {
 
     this.isProcessing.set(true);
     this.errorMessage.set(null);
+    this.erroresValidacion.set(null);
 
     if (this.isReadOnlyMode()) {
       this.statusMessage.set('Reiniciando hilos del servidor. Inyectando IA de nuevo...');
@@ -256,7 +259,12 @@ export class TestCreatorComponent {
         error: (err) => {
           this.isProcessing.set(false);
           this.statusMessage.set(null);
-          this.errorMessage.set(err.error?.message || 'El motor d IA volvió a fallar. Revisa los apuntes.');
+
+          if (err.status === 422) {
+            this.erroresValidacion.set(err.error?.errors);
+          } else if (err.status !== 403 && err.status !== 500) {
+            this.errorMessage.set(err.error?.message || 'Error en el proceso d generación.');
+          }
         }
       });
       return;
@@ -308,7 +316,12 @@ export class TestCreatorComponent {
       error: (err) => {
         this.isProcessing.set(false);
         this.statusMessage.set(null);
-        this.errorMessage.set(err.error?.message || 'Error en el proceso d generación.');
+
+        if (err.status === 422) {
+          this.erroresValidacion.set(err.error?.errors);
+        } else if (err.status !== 403 && err.status !== 500) {
+          this.errorMessage.set(err.error?.message || 'Error en el proceso d generación.');
+        }
       }
     });
   }
@@ -327,10 +340,9 @@ export class TestCreatorComponent {
         this.giftContent.set(res.data);
         this.mostrarModalGift.set(true);
       },
-      error: (err) => {
+      error: () => {
         this.isExporting.set(false);
         this.statusMessage.set(null);
-        this.errorMessage.set(err.error?.error || 'Error al exportar el test. Revisa tu plan.');
       }
     });
   }
@@ -346,5 +358,4 @@ export class TestCreatorComponent {
       setTimeout(() => this.statusMessage.set(null), 3000);
     });
   }
-
 }

@@ -32,7 +32,10 @@ export class ProfileComponent {
   public cargando = signal<boolean>(true);
 
   public editForm = signal({ Name: '', Email: '', Nickname: '', password: '', password_confirmation: '' });
+
   public msjError = signal<string | null>(null);
+  public erroresValidacion = signal<any>(null);
+
   categorias = signal<any[]>([]);
   estados = signal<any[]>([]);
   tiers = signal<any[]>([]);
@@ -78,7 +81,7 @@ export class ProfileComponent {
   cargarEstados() {
     this.estadoService.index().subscribe(estados => this.estados.set(estados));
   }
-  
+
   cargarTiers() {
     this.tierService.getAvailablePlans().subscribe(tier => this.tiers.set(tier));
   }
@@ -104,11 +107,15 @@ export class ProfileComponent {
   public abrirModal(): void {
     this.cargarDatosFormulario();
     this.msjError.set(null);
+    this.erroresValidacion.set(null);
     this.mostrarModalConfig.set(true);
   }
 
   public guardarCambiosPerfil(): void {
     const datos = this.editForm();
+
+    this.msjError.set(null);
+    this.erroresValidacion.set(null);
 
     if (datos.password && datos.password !== datos.password_confirmation) {
       this.msjError.set('Las contraseñas no coinciden');
@@ -126,8 +133,16 @@ export class ProfileComponent {
       next: () => {
         this.mostrarModalConfig.set(false);
         this.msjError.set(null);
+        this.erroresValidacion.set(null);
       },
-      error: (err) => this.msjError.set(err.error.message || 'Error al actualizar perfil')
+      error: (err) => {
+        if (err.status === 422) {
+          this.erroresValidacion.set(err.error?.errors);
+        }
+        else if (err.status !== 500 && err.status !== 401 && err.status !== 0 && err.status !== 403) {
+          this.msjError.set(err.error?.message || 'Error al actualizar perfil');
+        }
+      }
     });
   }
 

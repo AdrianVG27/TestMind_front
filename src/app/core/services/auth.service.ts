@@ -114,4 +114,8 @@ export class AuthService {
       })
     );
   }
+
+  registerAdmin(adminData: any): Observable<any> {
+    return this.http.post<any>('/api/admin/register', adminData);
+  }
 }

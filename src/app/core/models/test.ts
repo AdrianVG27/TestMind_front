@@ -1,8 +1,7 @@
 export interface Test {
     id: number;
     titulo: string;
-    codigo_estado: string;
-    estado: string;
+    estado_codigo: string;
     categoria_codigo: string;
     documento_id: number;
     configuracion: any;

@@ -70,4 +70,8 @@ export class TestService {
   }): Observable<Test> {
     return this.http.post<Test>('/api/user/test', payload);
   }
+
+  exportarMoodleGift(testId: number): Observable<{ message: string, data: string }> {
+    return this.http.get<{ message: string, data: string }>(`/api/user/test/${testId}/exportar/moodle-gift`);
+  }
 }

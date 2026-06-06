@@ -41,6 +41,10 @@ export class TestCreatorComponent {
   statusMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
 
+  isExporting = signal<boolean>(false);
+  mostrarModalGift = signal<boolean>(false);
+  giftContent = signal<string>('');
+
   selectedFile: File | null = null;
 
   testForm = {
@@ -129,7 +133,7 @@ export class TestCreatorComponent {
 
       this.isReadOnlyMode.set(true);
       this.documentSource.set('existing');
-      this.testEstadoCodigo.set(testExistente.codigo_estado);
+      this.testEstadoCodigo.set(testExistente.estado_codigo);
 
       const config = testExistente.configuracion || testExistente;
       this.testForm.nivel.set(config.nivel || 'medio');
@@ -308,4 +312,39 @@ export class TestCreatorComponent {
       }
     });
   }
+
+  abrirModalExportacion(event: Event) {
+    event.preventDefault();
+    if (!this.testId || this.testEstadoCodigo() !== 'C') return;
+
+    this.isExporting.set(true);
+    this.statusMessage.set('Generando formato Moodle GIFT...');
+
+    this.testService.exportarMoodleGift(this.testId).subscribe({
+      next: (res) => {
+        this.isExporting.set(false);
+        this.statusMessage.set(null);
+        this.giftContent.set(res.data);
+        this.mostrarModalGift.set(true);
+      },
+      error: (err) => {
+        this.isExporting.set(false);
+        this.statusMessage.set(null);
+        this.errorMessage.set(err.error?.error || 'Error al exportar el test. Revisa tu plan.');
+      }
+    });
+  }
+
+  cerrarModalGift() {
+    this.mostrarModalGift.set(false);
+    this.giftContent.set('');
+  }
+
+  copiarGiftAlPortapapeles() {
+    navigator.clipboard.writeText(this.giftContent()).then(() => {
+      this.statusMessage.set('¡Texto copiado al portapapeles!');
+      setTimeout(() => this.statusMessage.set(null), 3000);
+    });
+  }
+
 }

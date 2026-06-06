@@ -41,8 +41,9 @@
                 @if (documentSource() === 'upload') {
                 <div class="form-field">
                     <span class="font-pixel label-style">CATEGORÍA</span>
-                    <select [ngModel]="testForm.categoria_codigo()" (ngModelChange)="testForm.categoria_codigo.set($event)"
-                        name="categoria_codigo" required class="pixel-select font-pixel">
+                    <select [ngModel]="testForm.categoria_codigo()"
+                        (ngModelChange)="testForm.categoria_codigo.set($event)" name="categoria_codigo" required
+                        class="pixel-select font-pixel">
                         <option [ngValue]="null" disabled selected>SELECCIONAR...</option>
                         @for (cat of categorias(); track cat.id) {
                         <option [ngValue]="cat.codigo">{{ cat.descripcion }}</option>
@@ -188,6 +189,13 @@
                 {{ isProcessing() ? 'REPROCESANDO...' : '🔄 REINTENTAR_GENERACION_IA' }}
             </button>
             }
+
+            @if (testEstadoCodigo() === 'C') {
+            <button type="button" class="btn-submit btn-info-readonly font-vcr" [disabled]="isExporting()"
+                (click)="abrirModalExportacion($event)">
+                {{ isExporting() ? 'EXPORTANDO...' : '📥 EXPORTAR A MOODLE GIFT' }}
+            </button>
+            }
             }
         </div>
     </form>
@@ -205,6 +213,31 @@
                 <p class="font-pixel text-center">Tu navegador no soporta la vista del PDF. <a [href]="pdfUrlBlob()"
                         target="_blank">Haz clic aquí para abrirlo</a></p>
             </object>
+        </div>
+    </div>
+</div>
+}
+
+@if (mostrarModalGift()) {
+<div class="pixel-modal-overlay" (click)="cerrarModalGift()">
+    <div class="pixel-modal-content tm-card tm-shadow-blue gift-modal-content" (click)="$event.stopPropagation()">
+        <header class="modal-pdf-header">
+            <span class="font-vcr modal-pdf-title">MOODLE_GIFT_EXPORT.TXT</span>
+            <button type="button" class="btn-close-modal font-pixel" (click)="cerrarModalGift()">✖</button>
+        </header>
+
+        <div class="gift-modal-body">
+            <p class="font-pixel text-muted gift-instruction">
+                Copia este texto y pégalo directamente en la herramienta de importación de Moodle.
+            </p>
+
+            <textarea class="pixel-textarea font-pixel gift-textarea" readonly>{{ giftContent() }}</textarea>
+
+            <div class="modal-actions no-margin-top">
+                <button type="button" class="btn-submit font-vcr btn-copy" (click)="copiarGiftAlPortapapeles()">
+                    📋 COPIAR AL PORTAPAPELES
+                </button>
+            </div>
         </div>
     </div>
 </div>

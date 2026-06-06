@@ -7,8 +7,8 @@
     </div>
 
     <div class="card-badge-zone">
-        <span class="row-badge font-pixel" [class.badge-pass]="test().codigo_estado == 'pass'" [class.badge-neutral]="test().codigo_estado == 'pro'" [class.badge-fail]="test().codigo_estado == 'err'">
-            {{ test().estado }}
+        <span class="row-badge font-pixel" [class.badge-pass]="test().estado_codigo == 'C'" [class.badge-neutral]="test().estado_codigo == 'P' || test().estado_codigo == 'EP'" [class.badge-fail]="test().estado_codigo == 'E'">
+            {{ test().estado_codigo | getEstado: estados() }}
         </span>
     </div>
 </div>

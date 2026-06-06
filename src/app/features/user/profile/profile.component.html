@@ -16,7 +16,7 @@
         <div class="hero-info">
             <h1>{{ usuario.Name }} <span class="nickname-span font-pixel">{{ '@' + usuario.Nickname }}</span></h1>
             <p class="user-email">{{ usuario.Email }}</p>
-            <span class="user-badge-plan font-vcr">{{ authService.userPlan() | uppercase }} PLAN</span>
+            <span class="user-badge-plan font-vcr">{{ authService.userPlan() | getTier: tiers()  }}</span>
         </div>
         <button class="btn-config font-vcr" (click)="abrirModal()">
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 2048 2048"
@@ -81,7 +81,7 @@
                         <span class="row-title">{{ test.titulo }}</span>
                         <span class="row-subtitle font-vcr">{{ test.categoria_codigo | getCategoria: categorias() }}</span>
                     </div>
-                    <span class="row-badge badge-neutral font-vcr" [class.badge-pass]="test.codigo_estado == 'pass'" [class.badge-neutral]="test.codigo_estado == 'pro'" [class.badge-fail]="test.codigo_estado == 'err'">{{ test.estado }}</span>
+                    <span class="row-badge badge-neutral font-vcr" [class.badge-pass]="test.estado_codigo == 'C'" [class.badge-neutral]="test.estado_codigo == 'P' || test.estado_codigo == 'EP'" [class.badge-fail]="test.estado_codigo == 'E'">{{ test.estado_codigo | getEstado: estados() }}</span>
                 </div>
                 } @empty {
                 <div class="empty-list-notice font-pixel">Aún no has generado tests</div>

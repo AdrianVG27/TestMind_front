@@ -7,11 +7,15 @@ import { ProfileMetricService } from '../../../core/services/profile-metric.serv
 import { TestService } from '../../../core/services/test.service';
 import { GetCategoriaPipe } from "../../../shared/pipes/get-categoria.pipe";
 import { CategoriaService } from '../../../core/services/categoria.service';
+import { GetEstadoPipe } from "../../../shared/pipes/get-estado.pipe";
+import { EstadoService } from '../../../core/services/estado.service';
+import { GetTierPipe } from "../../../shared/pipes/get-tier.pipe";
+import { SuscriptionService } from '../../../core/services/suscription.service';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, GetCategoriaPipe],
+  imports: [CommonModule, FormsModule, GetCategoriaPipe, GetEstadoPipe, GetTierPipe],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -20,6 +24,8 @@ export class ProfileComponent {
   public metricService = inject(ProfileMetricService);
   private testService = inject(TestService);
   private catService = inject(CategoriaService);
+  private estadoService = inject(EstadoService);
+  private tierService = inject(SuscriptionService);
   private router = inject(Router);
 
   public mostrarModalConfig = signal<boolean>(false);
@@ -28,6 +34,8 @@ export class ProfileComponent {
   public editForm = signal({ Name: '', Email: '', Nickname: '', password: '', password_confirmation: '' });
   public msjError = signal<string | null>(null);
   categorias = signal<any[]>([]);
+  estados = signal<any[]>([]);
+  tiers = signal<any[]>([]);
 
   public ultimosIntentos = computed(() => {
     return this.metricService.listaIntentos().slice(0, 10);
@@ -46,6 +54,8 @@ export class ProfileComponent {
               next: () => {
                 this.cargarDatosFormulario();
                 this.cargarCategorias();
+                this.cargarEstados();
+                this.cargarTiers();
                 this.cargando.set(false);
               },
               error: () => this.marcarCargaCompletadaFailsafe()
@@ -63,6 +73,14 @@ export class ProfileComponent {
 
   cargarCategorias() {
     this.catService.index().subscribe(cats => this.categorias.set(cats));
+  }
+
+  cargarEstados() {
+    this.estadoService.index().subscribe(estados => this.estados.set(estados));
+  }
+  
+  cargarTiers() {
+    this.tierService.getAvailablePlans().subscribe(tier => this.tiers.set(tier));
   }
 
   private marcarCargaCompletadaFailsafe(): void {

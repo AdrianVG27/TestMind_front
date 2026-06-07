@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { AuthService } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -19,7 +19,18 @@ export class AdminNavComponent {
   public isAuthenticated = this.authService.isAuthenticated;
   public userPlan = this.authService.userPlan;
 
+  public isMenuOpen = signal<boolean>(false);
+
+  toggleMenu() {
+    this.isMenuOpen.update(val => !val);
+  }
+
+  closeMenu() {
+    this.isMenuOpen.set(false);
+  }
+
   logout() {
     this.authService.logout();
+    this.closeMenu();
   }
 }

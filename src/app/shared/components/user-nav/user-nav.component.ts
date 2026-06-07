@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslocoPipe } from '@ngneat/transloco';
@@ -22,6 +22,9 @@ export class UserNavComponent {
   public isAuthenticated = this.authService.isAuthenticated;
   public userPlan = this.authService.userPlan;
 
+  public isMenuOpen = signal<boolean>(false);
+  public isUserMenuOpen = signal<boolean>(false);
+
   ngOnInit(): void {
     if (this.listaPlanes().length === 0) {
       this.suscriptionService.getAvailablePlans().subscribe({
@@ -30,7 +33,25 @@ export class UserNavComponent {
     }
   }
 
+  toggleMenu() {
+    this.isMenuOpen.update(val => !val);
+  }
+
+  closeMenu() {
+    this.isMenuOpen.set(false);
+  }
+
+  toggleUserMenu() {
+    this.isUserMenuOpen.update(val => !val);
+  }
+
+  closeUserMenu() {
+    this.isUserMenuOpen.set(false);
+  }
+
   logout() {
     this.authService.logout();
+    this.closeMenu();
+    this.closeUserMenu();
   }
 }

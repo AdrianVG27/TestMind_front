@@ -1,50 +1,74 @@
 <nav class="nav-container">
     <div class="logo-section">
-        <a routerLink="/home" class="brand font-vcr">TESTMIND_</a>
+        <a routerLink="/home" class="brand font-vcr" (click)="closeMenu()">TESTMIND_</a>
     </div>
 
-    <ul class="nav-links">
-        <li>
-            <a routerLink="/home" routerLinkActive="active-link" class="nav-item">
-                {{ 'nav.home' | transloco }}
-            </a>
-        </li>
-        <li>
-            <a routerLink="/docs" routerLinkActive="active-link" class="nav-item">
-                {{ 'nav.documents' | transloco }}
-            </a>
-        </li>
-        <li>
-            <a routerLink="/tests" routerLinkActive="active-link" class="nav-item">
-                {{ 'nav.tests' | transloco }}
-            </a>
-        </li>
-        @if(isAuthenticated()) {
-        <li>
-            <a routerLink="/creator" routerLinkActive="active-link" class="nav-item">
-                CREAR TEST
-            </a>
-        </li>
-        }
-    </ul>
+    <button class="hamburger-btn font-vcr" (click)="toggleMenu()">
+        {{ isMenuOpen() ? '[X]' : '[=]' }}
+    </button>
 
-    <div class="user-badge">
-        @if (isAuthenticated()) {
-        <button (click)="logout()" class="btn-logout font-vcr">
-            {{ 'nav.logout' | transloco }}
-        </button>
-        <span routerLink="/suscriptions" class="plan-tag font-pixel">{{ userPlan() | getTier: listaPlanes() }}</span>
-        <a routerLink="/profile" routerLinkActive="active-link" class="nav-item btn-profile">
-            {{ 'nav.profile' | transloco }}
-        </a>
-        } @else {
-        <a routerLink="/login" routerLinkActive="active-link" class="nav-item btn-profile">
-            {{ 'nav.login' | transloco }}
-        </a>
-        }
+    <div class="nav-menu" [class.open]="isMenuOpen()">
 
-        <div class="lang-selector">
-            <app-lang-selector></app-lang-selector>
+        <ul class="nav-links">
+            <li>
+                <a routerLink="/home" routerLinkActive="active-link" class="nav-item" (click)="closeMenu()">
+                    {{ 'nav.home' | transloco }}
+                </a>
+            </li>
+            <li>
+                <a routerLink="/docs" routerLinkActive="active-link" class="nav-item" (click)="closeMenu()">
+                    {{ 'nav.documents' | transloco }}
+                </a>
+            </li>
+            <li>
+                <a routerLink="/tests" routerLinkActive="active-link" class="nav-item" (click)="closeMenu()">
+                    {{ 'nav.tests' | transloco }}
+                </a>
+            </li>
+            @if(isAuthenticated()) {
+            <li>
+                <a routerLink="/creator" routerLinkActive="active-link" class="nav-item" (click)="closeMenu()">
+                    {{ 'nav.newTest' | transloco }}
+                </a>
+            </li>
+            }
+        </ul>
+
+        <div class="user-badge">
+            @if (isAuthenticated()) {
+
+            <div class="dropdown-wrapper">
+                <button (click)="toggleUserMenu()" class="btn-user-trigger font-vcr">
+                    USER_MENU ▼
+                </button>
+
+                <div class="dropdown-content tm-card tm-shadow-cyan" [class.desktop-open]="isUserMenuOpen()">
+                    <span routerLink="/suscriptions" class="plan-tag font-pixel" (click)="closeUserMenu(); closeMenu()">
+                        PLAN: {{ userPlan() | getTier: listaPlanes() }}
+                    </span>
+
+                    <a routerLink="/profile" class="dropdown-item font-pixel" (click)="closeUserMenu(); closeMenu()">
+                        > {{ 'nav.profile' | transloco }}
+                    </a>
+
+                    <hr class="dropdown-divider">
+
+                    <button (click)="logout()" class="dropdown-item btn-logout-drop font-pixel">
+                        [X] {{ 'nav.logout' | transloco }}
+                    </button>
+                </div>
+            </div>
+
+            } @else {
+            <a routerLink="/login" routerLinkActive="active-link" class="nav-item btn-profile" (click)="closeMenu()">
+                {{ 'nav.login' | transloco }}
+            </a>
+            }
+
+            <div class="lang-selector">
+                <app-lang-selector></app-lang-selector>
+            </div>
         </div>
+
     </div>
 </nav>

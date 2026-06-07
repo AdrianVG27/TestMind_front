@@ -1,106 +1,29 @@
-.nav-container {
-    background-color: var(--bg-main);
-    border-bottom: 4px solid var(--border-blue);
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    image-rendering: pixelated;
-}
-
-.logo-section .brand {
-    color: var(--mint);
-    font-weight: bold;
-    font-size: 1.5rem;
-    text-decoration: none;
-    text-shadow: 2px 2px 0px var(--border-blue);
-    display: inline-block;
-    transition: text-shadow 0.2s ease, color 0.2s ease;
-}
-
-.logo-section .brand:hover {
-    color: #FFF;
-    text-shadow: 0 0 8px var(--mint), 3px 3px 0px var(--border-blue);
-    animation: terminal-blink 0.6s step-end infinite;
-}
-
-@keyframes terminal-blink {
-
-    from,
-    to {
-        clip-path: inset(0 0 0 0);
-    }
-
-    50% {
-        text-shadow: 0 0 8px var(--mint), 3px 3px 0px var(--border-blue);
-    }
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 15px;
-    margin: 0;
-    padding: 0;
-}
-
-.nav-item {
-    color: var(--text-main);
-    text-decoration: none;
-    font-weight: bold;
-    padding: 8px 16px;
-    border: 2px solid transparent;
-    border-radius: 4px;
-    transition: all 0.1s ease;
-}
-
-.nav-item:hover {
-    background-color: var(--border-blue);
-    color: var(--mint);
-    border-color: var(--mint);
-    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
-    transform: translate(-2px, -2px);
-}
-
-.active-link {
-    background-color: var(--border-blue);
-    border: 2px solid var(--mint);
-    color: var(--mint) !important;
-}
-
-.user-badge {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.plan-tag {
-    background-color: var(--mint);
-    color: var(--bg-main);
-    padding: 2px 8px;
-    font-size: 0.75rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    border: 2px solid var(--border-blue);
-    border-radius: 4px;
-    letter-spacing: 0.5px;
-}
-
-.btn-logout {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    padding: 6px 12px;
-    transition: color 0.2s;
-}
-
-.btn-logout:hover {
-    color: var(--error);
-}
-
-.lang-selector {
-    margin-left: 5px;
-}
-
 .active-conf {
     color: var(--mint);
+}
+
+.btn-icon-admin {
+    color: var(--text-muted);
+    transition: color 0.2s, transform 0.2s;
+    padding: 4px;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.btn-icon-admin:hover {
+    color: var(--mint);
+    transform: rotate(90deg);
+}
+
+@media screen and (max-width: 768px) {
+    .btn-icon-admin {
+        width: 100%;
+        text-align: center;
+        padding: 0.5rem;
+        border: 1px solid var(--border-subtle);
+        border-radius: 4px;
+        margin-top: 0.5rem;
+        border: none;
+    }
 }

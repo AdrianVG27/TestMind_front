@@ -1308,9 +1308,6 @@ fieldset[disabled] .pixel-textarea {
     box-shadow: 4px 4px 0px var(--border-subtle);
 }
 
-/* =========================================
-   📱 RESPONSIVE: MÓVILES Y TABLETS (MAX 768PX)
-========================================= */
 @media screen and (max-width: 768px) {
 
     .view-container-900,
@@ -1330,7 +1327,6 @@ fieldset[disabled] .pixel-textarea {
     .form-row-3,
     .recent-activity-grid {
         grid-template-columns: 1fr;
-        /* Todo a 1 sola columna */
         gap: 1rem;
     }
 
@@ -1397,5 +1393,175 @@ fieldset[disabled] .pixel-textarea {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         border: 1px solid var(--border-subtle);
+    }
+}
+
+.nav-container {
+    background-color: var(--bg-main);
+    border-bottom: 4px solid var(--border-blue);
+    padding: 1rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    image-rendering: pixelated;
+    position: relative;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: flex-end;
+}
+
+.logo-section {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.logo-section .brand {
+    color: var(--mint);
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-decoration: none;
+    text-shadow: 2px 2px 0px var(--border-blue);
+    display: inline-block;
+    transition: text-shadow 0.2s ease, color 0.2s ease;
+}
+
+.logo-section .brand:hover {
+    color: #FFF;
+    text-shadow: 0 0 8px var(--mint), 3px 3px 0px var(--border-blue);
+    animation: terminal-blink 0.6s step-end infinite;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.nav-item {
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    transition: all 0.1s ease;
+}
+
+.nav-item:hover {
+    background-color: var(--border-blue);
+    color: var(--mint);
+    border-color: var(--mint);
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
+    transform: translate(-2px, -2px);
+}
+
+.active-link {
+    background-color: var(--border-blue);
+    border: 2px solid var(--mint);
+    color: var(--mint) !important;
+}
+
+.user-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.lang-selector {
+    margin-left: 5px;
+}
+
+.hamburger-btn {
+    display: none;
+    background: none;
+    border: 2px solid var(--border-blue);
+    color: var(--mint);
+    font-size: 1.4rem;
+    padding: 4px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.hamburger-btn:hover {
+    background-color: var(--mint-glow);
+    box-shadow: 2px 2px 0px var(--border-blue);
+}
+
+.btn-logout {
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+@media screen and (max-width: 1400px) {
+    .nav-links {
+        position: relative;
+        left: auto;
+        transform: none;
+        flex-grow: 1;
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .nav-container {
+        flex-wrap: wrap;
+    }
+
+    .hamburger-btn {
+        display: block;
+    }
+
+    .nav-menu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 2px dashed var(--border-subtle);
+        gap: 1.5rem;
+    }
+
+    .nav-menu.open {
+        display: flex;
+        animation: fadeIn 0.2s ease-out;
+    }
+
+    .nav-links {
+        position: relative;
+        left: auto;
+        transform: none;
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .nav-item {
+        display: block;
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .user-badge {
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .btn-logout {
+        width: 100%;
+        border: 1px solid var(--border-subtle);
+        border: none;
     }
 }

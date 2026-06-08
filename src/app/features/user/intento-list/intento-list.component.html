@@ -2,7 +2,8 @@
     [categorias]="categorias()"
     [paginaActual]="paginaActual()"
     [totalPaginas]="totalPaginas()"
-    [mostrarAvisoVacio]="intentos().length === 0" textoVacio="No se encontraron cuestionarios con los filtros aplicados."
+    [mostrarAvisoVacio]="intentos().length === 0"
+    [textoVacio]="'listas.textoVacio' | transloco"
     (filtrar)="onFiltrar($event)">
 
     @for (intento of intentos(); track intento.id) {

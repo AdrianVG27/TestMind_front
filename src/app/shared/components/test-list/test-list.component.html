@@ -1,5 +1,5 @@
 <app-catalogo [categorias]="categorias()" [paginaActual]="paginaActual()" [totalPaginas]="totalPaginas()"
-    [mostrarAvisoVacio]="tests().length === 0" textoVacio="No se encontraron cuestionarios con los filtros aplicados."
+    [mostrarAvisoVacio]="tests().length === 0" [textoVacio]="'listas.textoVacio' | transloco"
     (filtrar)="onFiltrar($event)">
 
     @for (test of tests(); track test.id) {

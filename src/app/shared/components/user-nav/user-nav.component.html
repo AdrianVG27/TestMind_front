@@ -39,12 +39,17 @@
 
             <div class="dropdown-wrapper">
                 <button (click)="toggleUserMenu()" class="btn-user-trigger font-vcr">
-                    USER_MENU ▼
+                    {{ userNickname() }}
+                    @if (isUserMenuOpen()) {
+                        ▲
+                    } @else {
+                        ▼
+                    }
                 </button>
 
                 <div class="dropdown-content tm-card tm-shadow-cyan" [class.desktop-open]="isUserMenuOpen()">
                     <span routerLink="/suscriptions" class="plan-tag font-pixel" (click)="closeUserMenu(); closeMenu()">
-                        PLAN: {{ userPlan() | getTier: listaPlanes() }}
+                        {{ 'nav.planTag' | transloco:{ nombrePlan: (userPlan() | getTier: listaPlanes()) } }}
                     </span>
 
                     <a routerLink="/profile" class="dropdown-item font-pixel" (click)="closeUserMenu(); closeMenu()">

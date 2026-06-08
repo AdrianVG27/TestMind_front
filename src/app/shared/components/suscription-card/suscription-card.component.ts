@@ -1,17 +1,18 @@
-import { Component, Input, OnInit, AfterViewInit, inject, ElementRef, ViewChild, computed, signal } from '@angular/core';
+import { Component, Input, inject, ElementRef, ViewChild, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Tier } from '../../../core/models/tier';
 import { SuscriptionService } from '../../../core/services/suscription.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-suscription-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslocoModule],
   templateUrl: './suscription-card.component.html',
   styleUrl: './suscription-card.component.css'
 })
-export class SuscriptionCardComponent implements OnInit, AfterViewInit {
+export class SuscriptionCardComponent {
   private subscriptionService = inject(SuscriptionService);
   private authService = inject(AuthService);
 
@@ -53,7 +54,6 @@ export class SuscriptionCardComponent implements OnInit, AfterViewInit {
 
     this.subscriptionService.cancelarSuscripcionActiva().subscribe({
       next: () => {
-        console.log('Solicitud de baja tramitada correctamente.');
         this.authService.obtenerUsuarioAutenticado().subscribe();
       },
       error: (err) => {
@@ -63,12 +63,7 @@ export class SuscriptionCardComponent implements OnInit, AfterViewInit {
   }
 
   private onPagoCompletado() {
-    console.log('El servicio nos avisa de que el flujo de PayPal terminó.');
-
     this.authService.obtenerUsuarioAutenticado().subscribe({
-      next: () => {
-        console.log('¡Ecosistema e interfaz de usuario sincronizados tras el cobro!');
-      },
       error: (err) => {
         console.error('Error al actualizar los datos de la sesión pos-pago:', err);
       }

@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -13,6 +13,7 @@ import { AuthService } from '../../../core/services/auth.service';
 export class AdminPasswordComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private translocoService = inject(TranslocoService);
 
   isProcessing = signal<boolean>(false);
   statusMessage = signal<string | null>(null);
@@ -35,12 +36,11 @@ export class AdminPasswordComponent {
     if (!this.isFormValid()) return;
 
     if (this.passForm.password() !== this.passForm.password_confirmation()) {
-      this.errorMessage.set('Las nuevas contraseñas no coinciden.');
+      this.errorMessage.set(this.translocoService.translate('admin.changed_password.errorPassword'));
       return;
     }
 
     this.isProcessing.set(true);
-    this.statusMessage.set('Actualizando encriptación de seguridad...');
     this.errorMessage.set(null);
     this.erroresValidacion.set(null);
 
@@ -63,8 +63,6 @@ export class AdminPasswordComponent {
 
         if (err.status === 422) {
           this.erroresValidacion.set(err.error?.errors);
-        } else if (err.status !== 401 && err.status !== 403 && err.status !== 500) {
-          this.errorMessage.set(err.error?.message || 'Error al intentar cambiar la contraseña.');
         }
       }
     });

@@ -2,11 +2,12 @@ import { CommonModule } from "@angular/common";
 import { Component, OnInit, inject, signal } from "@angular/core";
 import { SuscriptionService } from "../../../core/services/suscription.service";
 import { SuscriptionCardComponent } from "../../../shared/components/suscription-card/suscription-card.component";
+import { TranslocoModule } from "@ngneat/transloco";
 
 @Component({
   selector: 'app-suscription-list',
   standalone: true,
-  imports: [CommonModule, SuscriptionCardComponent],
+  imports: [CommonModule, SuscriptionCardComponent, TranslocoModule],
   templateUrl: './suscription-list.component.html',
   styleUrl: './suscription-list.component.css'
 })

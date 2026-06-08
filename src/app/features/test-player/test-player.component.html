@@ -2,23 +2,23 @@
     @if (cargando()) {
     <div class="loading-box">
         <div class="spinner"></div>
-        <p class="font-vcr">Cargando cuestionario académico...</p>
+        <p class="font-vcr">{{ 'resolver.loading' | transloco }}</p>
     </div>
     } @else {
     @if (test(); as datosTest) {
     <header class="test-header">
         <h1>{{ datosTest.titulo }}</h1>
-        <span class="badge-total font-pixel">{{ datosTest.configuracion.total }} Preguntas</span>
+        <span class="badge-total font-pixel">{{ datosTest.configuracion.total }} {{ 'resolver.headerPreguntas' | transloco }}</span>
     </header>
 
     <main class="questions-list">
         @for (pregunta of datosTest.preguntas; track $index; let qIndex = $index) {
         <article class="tm-card tm-shadow-black question-card-margin">
             <header class="question-meta">
-                <span class="question-number font-pixel">Pregunta {{ qIndex + 1 }}</span>
+                <span class="question-number font-pixel">{{ 'resolver.headerPregunta' | transloco }} {{ qIndex + 1 }}</span>
                 @if (pregunta.tipo == 'unica_seleccion' && respuestasUsuario()[qIndex]) {
                 <button type="button" class="btn-clear-question font-pixel"
-                    (click)="limpiarRespuesta(qIndex)">Limpiar</button>
+                    (click)="limpiarRespuesta(qIndex)">{{ 'resolver.btnClear' | transloco }}</button>
                 }
             </header>
 
@@ -51,7 +51,7 @@
                 <div class="input-write-container">
                     <input type="text" class="pixel-input" [ngModel]="respuestasUsuario()[qIndex]"
                         (ngModelChange)="actualizarRespuestaUnica(qIndex, $event)"
-                        placeholder="Escribe tu respuesta aquí..." />
+                        [placeholder]="'resolver.placeholderWrite' | transloco" />
                 </div>
                 }
                 }
@@ -62,7 +62,7 @@
 
     <footer class="test-actions">
         <button class="btn-submit-test font-vcr width-auto" (click)="enviarRespuestas()">
-            Finalizar
+            {{ 'resolver.finalizar' | transloco }}
         </button>
     </footer>
     }

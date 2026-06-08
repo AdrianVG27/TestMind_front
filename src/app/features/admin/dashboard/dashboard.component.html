@@ -1,16 +1,16 @@
 <div class="admin-dashboard-layout">
-    <h1 class="font-vcr pixel-title">CORE_ADMIN_PANEL // METRICS</h1>
+    <h1 class="font-vcr pixel-title">{{ 'admin.dashboard.titulo' | transloco }}</h1>
 
     <div class="tm-metrics-grid">
 
         <section class="tm-card tm-shadow-blue tm-chart-card">
             <header class="panel-header">
-                <h3 class="font-vcr">SEGMENTACIÓN DE USUARIOS (PLANES)</h3>
+                <h3 class="font-vcr">{{ 'admin.dashboard.titulo_tiers' | transloco }}</h3>
             </header>
             <div class="tm-chart-wrapper">
                 @if (isVisualLoading() && chartLabels().length === 0) {
                 <div class="load-notice font-pixel animate-pulse">
-                    CONECTANDO CON EL REGISTRO DE MEMBRESÍAS...
+                    {{ 'admin.dashboard.load_tiers' | transloco }}
                 </div>
                 } @else {
                 <app-pie-chart [labels]="chartLabels()" [data]="chartData()"></app-pie-chart>
@@ -20,12 +20,12 @@
 
         <section class="tm-card tm-shadow-blue tm-chart-card">
             <header class="panel-header">
-                <h3 class="font-vcr">DISTRIBUCIÓN DE TESTS POR CATEGORÍA</h3>
+                <h3 class="font-vcr">{{ 'admin.dashboard.titulo_categorias' | transloco }}</h3>
             </header>
             <div class="tm-chart-wrapper">
                 @if (isVisualLoading() && categoriasLabels().length === 0) {
                 <div class="load-notice font-pixel animate-pulse">
-                    EXTRAYENDO VOLUMEN DE CATEGORÍAS...
+                    {{ 'admin.dashboard.load_categorias' | transloco }}
                 </div>
                 } @else {
                 <app-pie-chart [labels]="categoriasLabels()" [data]="categoriasData()"></app-pie-chart>
@@ -35,12 +35,12 @@
 
         <section class="tm-card tm-shadow-mint tm-chart-card tm-chart-full-width">
             <header class="panel-header">
-                <h3 class="font-vcr highlight-mint">EVOLUCIÓN: TESTS CREADOS</h3>
+                <h3 class="font-vcr highlight-mint">{{ 'admin.dashboard.titulo_timeline' | transloco }}</h3>
             </header>
             <div class="tm-chart-wrapper">
                 @if (isVisualLoading() && creadosLabels().length === 0) {
                 <div class="load-notice font-pixel animate-pulse alert-mint-border">
-                    SINCRONIZANDO HISTÓRICO DE CREACIÓN...
+                    {{ 'admin.dashboard.load_timeline' | transloco }}
                 </div>
                 } @else {
                 <app-line-chart [labels]="creadosLabels()" [data]="creadosData()"></app-line-chart>

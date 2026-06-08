@@ -4,11 +4,12 @@ import { TestService } from '../../../core/services/test.service';
 import { Router } from '@angular/router';
 import { CatalogoComponent, FiltrosCatalogo } from '../catalogo/catalogo.component';
 import { TestCardComponent } from '../test-card/test-card.component';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-test-list',
   standalone: true,
-  imports: [CatalogoComponent, TestCardComponent], 
+  imports: [CatalogoComponent, TestCardComponent, TranslocoModule], 
   templateUrl: './test-list.component.html',
   styleUrl: './test-list.component.css'
 })

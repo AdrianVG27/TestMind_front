@@ -17,6 +17,7 @@ export class AuthService {
   isAuthenticated = computed(() => !!this.userState());
   isAdmin = computed(() => this.userState()?.Role === 'admin');
   userPlan = computed(() => this.userState()?.Plan || 'FREE');
+  nickname = computed(() => this.userState()?.Nickname);
 
   constructor() {
     if (this.getToken()) {
@@ -108,8 +109,6 @@ export class AuthService {
 
           localStorage.setItem('tm_user', JSON.stringify(updatedUser));
           this.userState.set(updatedUser);
-
-          console.log("¡Signal userState actualizado en vivo con:", updatedUser);
         }
       })
     );

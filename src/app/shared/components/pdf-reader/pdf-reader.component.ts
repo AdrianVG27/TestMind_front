@@ -1,17 +1,18 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DocumentService } from '../../../core/services/document.service';
 import { Router } from '@angular/router';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-pdf-reader',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslocoModule],
   templateUrl: './pdf-reader.component.html',
   styleUrl: './pdf-reader.component.css'
 })
-export class PdfReaderComponent implements OnInit {
+export class PdfReaderComponent {
   @Input() documentId!: number;
 
   public pdfUrl: SafeResourceUrl | null = null;

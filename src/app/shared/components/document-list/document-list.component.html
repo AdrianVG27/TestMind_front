@@ -3,7 +3,7 @@
     [paginaActual]="paginaActual()" 
     [totalPaginas]="totalPaginas()"
     [mostrarAvisoVacio]="documentos().length === 0"
-    textoVacio="No hay documentos públicos que coincidan con la búsqueda." 
+    [textoVacio]="'listas.textoVacioDoc' | transloco"
     (filtrar)="onFiltrar($event)">
 
     @for (doc of documentos(); track doc.id) {

@@ -6,11 +6,12 @@ import { RealizarTest, Pregunta, IntentoResultado } from '../../core/models/test
 import { TestService } from '../../core/services/test.service';
 import { LoginComponent } from "../auth/login/login.component";
 import { RegisterComponent } from "../auth/register/register.component";
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-test-player',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoginComponent, RegisterComponent],
+  imports: [CommonModule, FormsModule, LoginComponent, RegisterComponent, TranslocoModule],
   templateUrl: './test-player.component.html',
   styleUrl: './test-player.component.css'
 })

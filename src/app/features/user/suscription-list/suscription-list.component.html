@@ -1,10 +1,10 @@
 <div class="view-container-900">
-    <h2 class="pixel-title font-vcr">SISTEMA_DE_SUSCRIPCIONES_</h2>
+    <h2 class="pixel-title font-vcr">{{ 'suscriptionList.title' | transloco }}</h2>
 
     @if (cargandoEcosistema() || !sdkListo()) {
     <div class="loading-box font-pixel">
         <div class="spinner"></div>
-        <p>CONECTANDO CON SERVIDORES DE PAYPAL SANDBOX...</p>
+        <p>{{ 'suscriptionList.loading' | transloco }}</p>
     </div>
     } @else {
     <div class="suscription-grid">
@@ -12,7 +12,7 @@
         <app-suscription-card [plan]="item"></app-suscription-card>
         } @empty {
         <div class="error-notice font-pixel">
-            ERROR_CRÍTICO: No se han localizado niveles de tarificación activos en las tablas de apoyo locales.
+            {{ 'suscriptionList.noData' | transloco }}
         </div>
         }
     </div>

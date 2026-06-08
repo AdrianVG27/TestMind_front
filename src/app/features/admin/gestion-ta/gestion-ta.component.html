@@ -1,14 +1,14 @@
 <div class="panel-container tm-view-wide">
-    <h2 class="font-vcr pixel-title">Panel de Gestión: Tablas de Apoyo (GestionTA)</h2>
+    <h2 class="font-vcr pixel-title">{{ 'admin.gestionTA.titulo' | transloco }}</h2>
     <p class="subtitle text-center space-bottom tm-text-italic">
-        Herramienta polimórfica dinámica para la administración del sistema TestMind.
+        {{ 'admin.gestionTA.subtitulo' | transloco }}
     </p>
 
     <div class="selector-box tm-card tm-shadow-blue space-bottom">
-        <label for="tablaSelect" class="label-style font-vcr">Selecciona la tabla auxiliar a modificar:</label>
+        <label for="tablaSelect" class="label-style font-vcr">{{ 'admin.gestionTA.labelCombo' | transloco }}</label>
         <select id="tablaSelect" class="pixel-select" (change)="onTablaChange($event)" [disabled]="isProcessing()">
             <option value="" class="select-option-placeholder">
-                -- Elige una tabla de soporte --
+                {{ 'admin.gestionTA.generalCombo' | transloco }}
             </option>
             <option *ngFor="let t of tablasDisponibles()" [value]="t.id" class="select-option-dark">
                 {{ t.descripcion }} ({{ t.nombreTA }})
@@ -18,15 +18,21 @@
 
     <div *ngIf="errorMessage()" class="error-notice space-bottom">{{ errorMessage() }}</div>
     <div *ngIf="successMessage()" class="load-notice space-bottom tm-btn-mint-border">{{ successMessage() }}</div>
-    <div *ngIf="isProcessing()" class="load-notice space-bottom">{{ isProcessing() ? 'Procesando consulta en base de datos...' : '' }}</div>
+    <div *ngIf="isProcessing()" class="load-notice space-bottom">
+        @if (isProcessing()) {
+        {{ 'admin.gestionTA.loadTA' | transloco }}
+        }
+    </div>
 
     <div class="table-wrapper tm-card tm-shadow-black" *ngIf="tablaActiva(); else noDataTemplate">
         <div class="space-bottom animate-header tm-flex-between">
-            <h3 class="font-vcr" style="color: var(--text-main); margin: 0;">
-                Contenido de: <span class="highlight-mint">{{ tablaActiva()?.descripcion }}</span>
+            <h3 class="font-vcr table-title">
+                {{ 'admin.gestionTA.titleTA' | transloco }} <span class="highlight-mint">{{ tablaActiva()?.descripcion
+                    }}</span>
             </h3>
-            <button class="btn-save font-vcr action-add-button" (click)="iniciarCreacion()" [disabled]="isProcessing() || isCreandoNuevo()">
-                + Añadir Registro
+            <button class="btn-save font-vcr action-add-button" (click)="iniciarCreacion()"
+                [disabled]="isProcessing() || isCreandoNuevo()">
+                + {{ 'admin.gestionTA.nuevoRegistro' | transloco }}
             </button>
         </div>
 
@@ -35,46 +41,49 @@
                 <thead>
                     <tr>
                         <th class="font-vcr" *ngFor="let col of columnasTabla()">{{ col | uppercase }}</th>
-                        <th class="font-vcr text-center actions-column-width">ACCIONES</th>
+                        <th class="font-vcr text-center actions-column-width">{{ 'admin.gestionTA.botonera' | transloco
+                            }}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let fila of tablaActiva()?.registros" [class.tm-editing-row]="idFilaActiva() === fila.id">
+                    <tr *ngFor="let fila of tablaActiva()?.registros"
+                        [class.tm-editing-row]="idFilaActiva() === fila.id">
                         <td *ngFor="let col of columnasTabla()">
                             <span *ngIf="idFilaActiva() !== fila.id">
                                 {{ fila[col] }}
                             </span>
                             <div *ngIf="idFilaActiva() === fila.id">
-                                <input type="text" 
-                                       class="pixel-input tm-input-cell"
-                                       [value]="filaEnEdicion()?.[col]"
-                                       (input)="actualizarCampoFila(col, $event)" 
-                                       [disabled]="isCampoProtegido(col)"
-                                       [class.tm-locked-input]="isCampoProtegido(col)" />
-                                
+                                <input type="text" class="pixel-input tm-input-cell" [value]="filaEnEdicion()?.[col]"
+                                    (input)="actualizarCampoFila(col, $event)" [disabled]="isCampoProtegido(col)"
+                                    [class.tm-locked-input]="isCampoProtegido(col)" />
+
                                 @if (erroresValidacion()?.[col]) {
-                                    <small class="pixel-validation-error" style="margin-top: 0.1rem; display: block; font-size: 1rem;">
-                                        {{ erroresValidacion()[col][0] }}
-                                    </small>
+                                <small class="pixel-validation-error table-validation-error">
+                                    {{ erroresValidacion()[col][0] }}
+                                </small>
                                 }
                             </div>
                         </td>
                         <td>
                             <div class="tm-flex-center" *ngIf="idFilaActiva() !== fila.id">
-                                <button class="btn-action-view font-vcr" (click)="iniciarEdicion(fila)" [disabled]="isCreandoNuevo()">Editar</button>
-                                
-                                <button *ngIf="tablaActiva()?.tieneLenguajes" 
-                                        class="btn-action-view font-vcr tm-btn-mint-border"
-                                        (click)="abrirModalIdiomas(fila)"
-                                        [disabled]="isCreandoNuevo()">
-                                    Idiomas
+                                <button class="btn-action-view font-vcr" (click)="iniciarEdicion(fila)"
+                                    [disabled]="isCreandoNuevo()">{{ 'admin.gestionTA.btnEdit' | transloco }}</button>
+
+                                <button *ngIf="tablaActiva()?.tieneLenguajes"
+                                    class="btn-action-view font-vcr tm-btn-mint-border"
+                                    (click)="abrirModalIdiomas(fila)" [disabled]="isCreandoNuevo()">
+                                    {{ 'admin.gestionTA.btnLang' | transloco }}
                                 </button>
 
-                                <button class="btn-action-view font-vcr tm-btn-del" (click)="solicitarEliminarFila(fila.id)" [disabled]="isCreandoNuevo()">Eliminar</button>
+                                <button class="btn-action-view font-vcr tm-btn-del"
+                                    (click)="solicitarEliminarFila(fila.id)" [disabled]="isCreandoNuevo()">{{
+                                    'admin.gestionTA.btnDel' | transloco }}</button>
                             </div>
                             <div class="tm-flex-center" *ngIf="idFilaActiva() === fila.id">
-                                <button class="btn-save font-vcr tm-btn-padded" (click)="guardarCambios()">Guardar</button>
-                                <button class="btn-cancel font-vcr tm-btn-padded" (click)="cancelarEdicion()">Cancelar</button>
+                                <button class="btn-save font-vcr tm-btn-padded" (click)="guardarCambios()">{{
+                                    'admin.gestionTA.btnSave' | transloco }}</button>
+                                <button class="btn-cancel font-vcr tm-btn-padded" (click)="cancelarEdicion()">{{
+                                    'admin.gestionTA.btnCancel' | transloco }}</button>
                             </div>
                         </td>
                     </tr>
@@ -82,26 +91,27 @@
                     <tr *ngIf="isCreandoNuevo()" class="tm-creation-row">
                         <td *ngFor="let col of columnasTabla()">
                             <div *ngIf="isCampoBloqueadoCreacion(col)">
-                                <input type="text" class="pixel-input tm-input-cell tm-locked-input text-center" [value]="nuevaFilaData()?.[col]" disabled />
+                                <input type="text" class="pixel-input tm-input-cell tm-locked-input text-center"
+                                    [value]="nuevaFilaData()?.[col]" disabled />
                             </div>
                             <div *ngIf="!isCampoBloqueadoCreacion(col)">
-                                <input type="text" 
-                                       class="pixel-input tm-input-cell tm-creation-highlight" 
-                                       [value]="nuevaFilaData()?.[col]" 
-                                       (input)="actualizarCampoNuevaFila(col, $event)" 
-                                       [placeholder]="col === 'codigo' ? 'Ej: INF_01...' : 'Escribir...'" />
-                                
+                                <input type="text" class="pixel-input tm-input-cell tm-creation-highlight"
+                                    [value]="nuevaFilaData()?.[col]" (input)="actualizarCampoNuevaFila(col, $event)"
+                                    [placeholder]="col === 'codigo' ? ('admin.gestionTA.ejemploCodigo' | transloco) : ('admin.gestionTA.escribir' | transloco)" />
+
                                 @if (erroresValidacion()?.[col]) {
-                                    <small class="pixel-validation-error" style="margin-top: 0.1rem; display: block; font-size: 1rem;">
-                                        {{ erroresValidacion()[col][0] }}
-                                    </small>
+                                <small class="pixel-validation-error table-validation-error">
+                                    {{ erroresValidacion()[col][0] }}
+                                </small>
                                 }
                             </div>
                         </td>
                         <td>
                             <div class="tm-flex-center">
-                                <button class="btn-save font-vcr tm-btn-padded" (click)="ejecutarGuardadoNuevo()">Confirmar</button>
-                                <button class="btn-cancel font-vcr tm-btn-padded" (click)="cancelarCreacion()">Quitar</button>
+                                <button class="btn-save font-vcr tm-btn-padded" (click)="ejecutarGuardadoNuevo()">{{
+                                    'admin.gestionTA.btnConfirmar' | transloco }}</button>
+                                <button class="btn-cancel font-vcr tm-btn-padded" (click)="cancelarCreacion()">{{
+                                    'admin.gestionTA.btnCancel' | transloco }}</button>
                             </div>
                         </td>
                     </tr>
@@ -112,7 +122,7 @@
 
     <ng-template #noDataTemplate>
         <div class="placeholder-box load-notice text-center" *ngIf="!isProcessing()">
-            <p class="tm-text-italic">Selecciona una tabla del listado superior para inicializar el mapeador dinámico de campos.</p>
+            <p class="tm-text-italic">{{ 'admin.gestionTA.noData' | transloco }}</p>
         </div>
     </ng-template>
 </div>
@@ -120,19 +130,26 @@
 <div class="modal-overlay" *ngIf="isModalAbierta()">
     <div class="modal-box">
         <div class="modal-header">
-            <h2>Gestión Multiidioma Dinámica</h2>
+            <h2>{{ 'admin.gestionTA.titleIdiomas' | transloco }}</h2>
             <button class="btn-close-x font-vcr" (click)="cerrarModal()">&times;</button>
         </div>
-        
+
         <p class="modal-subtitle-context tm-text-italic">
-            Modificando traducciones para la clave de negocio: <span class="highlight-mint">{{ filaParaModal()?.codigo }}</span>
+            {{ 'admin.gestionTA.subtitleIdiomas' | transloco }} <span class="highlight-mint">{{
+                filaParaModal()?.codigo}}</span>
         </p>
 
         <div class="form-field space-bottom">
-            <label class="label-style font-vcr" style="font-size: 0.9rem;">Visualizar Idioma:</label>
+            <label class="label-style font-vcr modal-label-small">{{ 'admin.gestionTA.labelComboIdiomas' | transloco
+                }}</label>
             <select class="pixel-select" [value]="idiomaModalActivo()" (change)="cambiarIdiomaModal($event)">
                 <option *ngFor="let trad of traduccionesCargadas()" [value]="trad.lenguaje_codigo">
-                    {{ trad.lenguaje_codigo | uppercase }} {{ trad.existe_pivote ? '✓' : '(SIN TRADUCIR)' }}
+                    {{ trad.lenguaje_codigo | uppercase }}
+                    @if (trad.existe_pivote) {
+                    {{ 'admin.gestionTA.conTraduccion' | transloco }}
+                    } @else {
+                    {{ 'admin.gestionTA.sinTraduccion' | transloco }}
+                    }
                 </option>
             </select>
         </div>
@@ -140,21 +157,25 @@
         <div class="modal-form">
             <ng-container *ngFor="let trad of traduccionesCargadas(); let i = index">
                 <div class="form-field" *ngIf="trad.lenguaje_codigo === idiomaModalActivo()">
-                    <span class="font-vcr" style="color: var(--mint); text-transform: uppercase;">
-                        {{ trad.existe_pivote ? 'Editar Contenido Actual:' : 'Crear Nueva Traducción (En Caliente):' }}
+                    <span class="font-vcr modal-field-title">
+                        @if (trad.existe_pivote) {
+                        {{ 'admin.gestionTA.labelEditLang' | transloco }}
+                        } @else {
+                        {{ 'admin.gestionTA.labelNewLang' | transloco }}
+                        }
                     </span>
-                    <input type="text" 
-                           class="pixel-input" 
-                           [value]="trad.descripcion" 
-                           [placeholder]="trad.existe_pivote ? '' : 'Introduce la traducción para guardar este idioma...'"
-                           (input)="actualizarTextoTraduccion(i, $event)" />
+                    <input type="text" class="pixel-input" [value]="trad.descripcion"
+                        [placeholder]="trad.existe_pivote ? '' : ('admin.gestionTA.newLang' | transloco)"
+                        (input)="actualizarTextoTraduccion(i, $event)" />
                 </div>
             </ng-container>
         </div>
 
-        <div class="modal-actions" style="margin-top: 1.5rem;">
-            <button class="btn-cancel font-vcr" (click)="cerrarModal()">Descartar</button>
-            <button class="btn-save" (click)="ejecutarGuardadoIdiomasMasivo()">Guardar Cambios</button>
+        <div class="modal-actions modal-actions-spaced">
+            <button class="btn-cancel font-vcr" (click)="cerrarModal()">{{ 'admin.gestionTA.btnCancel' | transloco
+                }}</button>
+            <button class="btn-save" (click)="ejecutarGuardadoIdiomasMasivo()">{{ 'admin.gestionTA.btnSave' | transloco
+                }}</button>
         </div>
     </div>
 </div>
@@ -162,39 +183,43 @@
 <div class="modal-overlay" *ngIf="isModalBorradoAbierta()">
     <div class="modal-box modal-box-danger">
         <div class="modal-header modal-header-danger">
-            <h2 class="text-danger-color">ADVERTENCIA DE SISTEMA</h2>
+            <h2 class="text-danger-color">{{ 'admin.gestionTA.titleDel' | transloco }}</h2>
             <button class="btn-close-x btn-close-danger font-vcr" (click)="cancelarBorrado()">&times;</button>
         </div>
-        
+
         <div class="modal-form">
             <div *ngIf="isBorradoProhibido()">
                 <p class="font-vcr error-notice critical-notice-spacing">
-                    CRITICAL WARNING: ACCIÓN DE BORRADO DESACTIVADA.
+                    {{ 'admin.gestionTA.warnDel' | transloco }}
                 </p>
-                <p style="color: var(--text-main); font-size: 0.9rem; line-height: 1.5;">
-                    Estás intentando eliminar el registro base <strong class="text-danger-color">"TablaApoyo"</strong> de la meta-tabla. Borrar este mapa de metadatos invalidaría el sistema CRUD polimórfico integrado de TestMind de inmediato.
+                <p class="modal-warning-text">
+                    {{ 'admin.gestionTA.errorBorradoProhibido' | transloco:{ registro: '', app: 'TestMind' } }}
+                    <strong class="text-danger-color">"TablaApoyo"</strong>
+                    {{ 'admin.gestionTA.errorBorradoProhibido_continuacion' | transloco }}
                 </p>
             </div>
 
             <div *ngIf="!isBorradoProhibido()">
-                <p class="font-vcr" style="font-size: 0.95rem; line-height: 1.6; color: var(--text-main);">
-                    ¿Estás completamente seguro de eliminar el registro auxiliar con ID: 
-                    <span class="text-danger-color font-weight-bold">#{{ idFilaParaBorrar() }}</span>?
+                <p class="font-vcr modal-confirm-text">
+                    {{ 'admin.gestionTA.confirmarBorrado' | transloco:{ id: idFilaParaBorrar() } }}
                 </p>
-                <p class="tm-text-italic" style="font-size: 0.85rem; margin-top: -0.5rem;">
-                    Esta acción es irreversible y podría violar restricciones d integridad referencial si el registro está vinculado a otras tablas activas (ej: documentos).
+                <p class="tm-text-italic modal-confirm-subtext">
+                    {{ 'admin.gestionTA.confirmDel' | transloco }}
                 </p>
             </div>
         </div>
 
-        <div class="modal-actions" style="margin-top: 2rem;">
+        <div class="modal-actions modal-actions-danger">
             <button class="btn-cancel font-vcr" (click)="cancelarBorrado()">
-                {{ isBorradoProhibido() ? 'Volver al Panel' : 'Cancelar' }}
+                @if (isBorradoProhibido()) {
+                {{ 'admin.gestionTA.volverDashboard' | transloco }}
+                } @else {
+                {{ 'admin.gestionTA.btnCancel' | transloco }}
+                }
             </button>
-            <button *ngIf="!isBorradoProhibido()"
-                    class="btn-save btn-save-danger" 
-                    (click)="ejecutarEliminacionConfirmada()">
-                Confirmar Borrado
+            <button *ngIf="!isBorradoProhibido()" class="btn-save btn-save-danger"
+                (click)="ejecutarEliminacionConfirmada()">
+                {{ 'admin.gestionTA.btnConfirmar' | transloco }}
             </button>
         </div>
     </div>

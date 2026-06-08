@@ -1,6 +1,10 @@
 <div class="tm-card tm-shadow-blue create-test-box">
     <h2 class="pixel-title font-vcr">
-        {{ isReadOnlyMode() ? 'DETALLES_CUESTIONARIO' : 'NUEVO TEST' }}
+        @if (isReadOnlyMode()) {
+            {{ 'testCreator.existenteTitle' | transloco }}
+        } @else {
+            {{ 'testCreator.newTitle' | transloco }}
+        }
     </h2>
 
     @if (statusMessage()) {
@@ -21,18 +25,18 @@
             <div class="document-source-toggle space-bottom">
                 <button type="button" class="btn-toggle font-pixel" [class.active]="documentSource() === 'upload'"
                     (click)="setSource('upload')">
-                    SUBIR NUEVO PDF
+                    {{ 'testCreator.upload' | transloco }}
                 </button>
                 <button type="button" class="btn-toggle font-pixel" [class.active]="documentSource() === 'existing'"
                     (click)="setSource('existing')">
-                    REUTILIZAR EXISTENTE
+                    {{ 'testCreator.select' | transloco }}
                 </button>
             </div>
             }
 
             <div class="form-row-2">
                 <div class="form-field">
-                    <span class="font-pixel label-style">TÍTULO DEL TEST</span>
+                    <span class="font-pixel label-style">{{ 'testCreator.titleTest' | transloco }}</span>
                     <input type="text" [ngModel]="testForm.titulo()" (ngModelChange)="testForm.titulo.set($event)"
                         name="titulo" required class="pixel-input">
                     
@@ -45,11 +49,11 @@
 
                 @if (documentSource() === 'upload') {
                 <div class="form-field">
-                    <span class="font-pixel label-style">CATEGORÍA</span>
+                    <span class="font-pixel label-style">{{ 'testCreator.categoria' | transloco }}</span>
                     <select [ngModel]="testForm.categoria_codigo()"
                         (ngModelChange)="testForm.categoria_codigo.set($event)" name="categoria_codigo" required
                         class="pixel-select font-pixel">
-                        <option [ngValue]="null" disabled selected>SELECCIONAR...</option>
+                        <option [ngValue]="null" disabled selected>{{ 'testCreator.selectCategoria' | transloco }}</option>
                         @for (cat of categorias(); track cat.id) {
                         <option [ngValue]="cat.codigo">{{ cat.descripcion }}</option>
                         }
@@ -63,9 +67,9 @@
                 </div>
                 } @else {
                 <div class="form-field">
-                    <span class="font-pixel label-style">CATEGORÍA (ASOCIADA AL APUNTE)</span>
-                    <input type="text" [value]="categoriaDelDocumentoSeleccionado() || 'Auto-detectada...'"
-                        class="pixel-input font-pixel input-readonly" readonly placeholder="Auto-detectada...">
+                    <span class="font-pixel label-style">{{ 'testCreator.categoria' | transloco }}</span>
+                    <input type="text" [value]="categoriaDelDocumentoSeleccionado() || 'testCreator.autoDetectada' | transloco"
+                        class="pixel-input font-pixel input-readonly" readonly [placeholder]="'testCreator.autoDetectada' | transloco">
                 </div>
                 }
             </div>
@@ -73,7 +77,7 @@
             @if (documentSource() === 'upload') {
             <div class="form-row-2 align-center no-margin">
                 <div class="form-field">
-                    <span class="font-pixel label-style">ARCHIVO PDF (MÁX 12MB)</span>
+                    <span class="font-pixel label-style">{{ 'testCreator.inputDoc' | transloco }}</span>
                     <input type="file" (change)="onFileSelected($event)" accept="application/pdf"
                         class="pixel-file-input font-pixel" required>
                     
@@ -87,7 +91,7 @@
                     <label class="remember-label font-pixel">
                         <input type="checkbox" [ngModel]="testForm.isPublic()"
                             (ngModelChange)="testForm.isPublic.set($event)" name="isPublic" class="pixel-checkbox">
-                        <span class="checkbox-text">DOCUMENTO PÚBLICO</span>
+                        <span class="checkbox-text">{{ 'testCreator.publicDoc' | transloco }}</span>
                     </label>
                 </div>
             </div>
@@ -96,16 +100,16 @@
 
         @if (documentSource() === 'existing') {
         <div class="existing-docs-explorer">
-            <span class="font-pixel label-style">DOCUMENTO ASOCIADO</span>
+            <span class="font-pixel label-style">{{ 'testCreator.docAsociado' | transloco }}</span>
 
             @if (!isReadOnlyMode()) {
             <div class="explorer-filters">
-                <input type="text" placeholder="FILTRAR POR NOMBRE..." [ngModel]="filtroNombreLocal()"
+                <input type="text" [placeholder]="'testCreator.placeholderFiltrado' | transloco" [ngModel]="filtroNombreLocal()"
                     (ngModelChange)="filtroNombreLocal.set($event)" name="filterNombre"
                     class="pixel-input font-pixel input-small">
                 <select [ngModel]="filtroCategoriaLocal()" (ngModelChange)="filtroCategoriaLocal.set($event)"
                     name="filterCategoria" class="pixel-select font-pixel select-small">
-                    <option [ngValue]="undefined">TODAS</option>
+                    <option [ngValue]="undefined">{{ 'testCreator.allFiltradoCategorias' | transloco }}</option>
                     @for (cat of categorias(); track cat.id) {
                     <option [ngValue]="cat.id">{{ cat.descripcion }}</option>
                     }
@@ -127,13 +131,17 @@
                         @if (!isReadOnlyMode()) {
                         <button type="button" class="btn-action-select font-pixel" [disabled]="isProcessing()"
                             (click)="seleccionarDocumentoLocal(doc)">
-                            {{ testForm.documento_id() === doc.id ? 'SELECTED' : 'SELECT' }}
+                            @if (testForm.documento_id() === doc.id) {
+                                {{ 'testCreator.docSeleccionado' | transloco }}
+                            } @else {
+                                {{ 'testCreator.seleccionarDoc' | transloco }}
+                            }
                         </button>
                         }
                     </div>
                 </div>
                 } @empty {
-                <div class="empty-explorer font-pixel">No se encontraron apuntes asociados.</div>
+                <div class="empty-explorer font-pixel">{{ 'testCreator.docNoData' | transloco }}</div>
                 }
             </div>
 
@@ -150,12 +158,12 @@
 
             <div class="form-row-3">
                 <div class="form-field">
-                    <span class="font-pixel label-style">NIVEL</span>
+                    <span class="font-pixel label-style">{{ 'testCreator.dificultad' | transloco }}</span>
                     <select [ngModel]="testForm.nivel()" (ngModelChange)="testForm.nivel.set($event)" name="nivel"
                         class="pixel-select font-pixel">
-                        <option value="facil">FÁCIL</option>
-                        <option value="medio">MEDIO</option>
-                        <option value="dificil">DIFÍCIL</option>
+                        <option value="facil">{{ 'testCreator.facil' | transloco }}</option>
+                        <option value="medio">{{ 'testCreator.medio' | transloco }}</option>
+                        <option value="dificil">{{ 'testCreator.dificil' | transloco }}</option>
                     </select>
 
                     @if (erroresValidacion()?.nivel) {
@@ -165,7 +173,7 @@
                     }
                 </div>
                 <div class="form-field">
-                    <span class="font-pixel label-style">TOTAL PREGUNTAS</span>
+                    <span class="font-pixel label-style">{{ 'testCreator.cantidadPreguntas' | transloco }}</span>
                     <input type="number" [ngModel]="testForm.total()" (ngModelChange)="testForm.total.set($event)"
                         name="total" min="1" class="pixel-input font-pixel">
                     
@@ -176,7 +184,7 @@
                     }
                 </div>
                 <div class="form-field">
-                    <span class="font-pixel label-style">MÍN OPCIONES</span>
+                    <span class="font-pixel label-style">{{ 'testCreator.minOptions' | transloco }}</span>
                     <input type="number" [ngModel]="testForm.min_opciones()"
                         (ngModelChange)="testForm.min_opciones.set($event)" name="min_opciones"
                         class="pixel-input font-pixel">
@@ -191,7 +199,7 @@
 
             <div class="form-row-3">
                 <div class="form-field">
-                    <span class="font-pixel label-style">PROP ÚNICA (%)</span>
+                    <span class="font-pixel label-style">{{ 'testCreator.propUnic' | transloco }}</span>
                     <input type="number" [ngModel]="testForm.prop_unica()"
                         (ngModelChange)="testForm.prop_unica.set($event)" name="prop_unica"
                         class="pixel-input font-pixel">
@@ -203,7 +211,7 @@
                     }
                 </div>
                 <div class="form-field">
-                    <span class="font-pixel label-style">PROP MULTI (%)</span>
+                    <span class="font-pixel label-style">{{ 'testCreator.propMulti' | transloco }}</span>
                     <input type="number" [ngModel]="testForm.prop_multi()"
                         (ngModelChange)="testForm.prop_multi.set($event)" name="prop_multi"
                         class="pixel-input font-pixel">
@@ -215,7 +223,7 @@
                     }
                 </div>
                 <div class="form-field">
-                    <span class="font-pixel label-style">PROP ESCRIBIR (%)</span>
+                    <span class="font-pixel label-style">{{ 'testCreator.propWrite' | transloco }}</span>
                     <input type="number" [ngModel]="testForm.prop_escribir()"
                         (ngModelChange)="testForm.prop_escribir.set($event)" name="prop_escribir"
                         class="pixel-input font-pixel">
@@ -229,10 +237,10 @@
             </div>
 
             <div class="form-field">
-                <span class="font-pixel label-style">INDICACIONES EXTRAS IA (OPCIONAL)</span>
+                <span class="font-pixel label-style">{{ 'testCreator.indicaciones' | transloco }}</span>
                 <textarea [ngModel]="testForm.input_user()" (ngModelChange)="testForm.input_user.set($event)"
                     name="input_user" maxlength="500" class="pixel-textarea font-pixel"
-                    placeholder="Ej: Enfócate más en el capítulo 3..."></textarea>
+                    [placeholder]="'testCreator.placeholderIndicaciones' | transloco"></textarea>
                 
                 @if (erroresValidacion()?.input_user) {
                     <small class="font-pixel pixel-validation-error">
@@ -245,19 +253,31 @@
         <div class="form-actions-zone space-top">
             @if (!isReadOnlyMode()) {
             <button type="submit" class="btn-submit font-vcr" [disabled]="isProcessing() || !isFormValid()">
-                {{ isProcessing() ? 'PROCESANDO...' : 'START_GENERATION ➔' }}
+                @if (isProcessing()) {
+                    {{ 'testCreator.procesando' | transloco }}
+                } @else {
+                    {{ 'testCreator.generar' | transloco }}
+                }
             </button>
             } @else {
-            @if (testEstadoCodigo() === 'err') {
+            @if (testEstadoCodigo() === 'E') {
             <button type="submit" class="btn-submit btn-reintento font-vcr" [disabled]="isProcessing()">
-                {{ isProcessing() ? 'REPROCESANDO...' : '🔄 REINTENTAR_GENERACION_IA' }}
+                @if (isProcessing()) {
+                    {{ 'testCreator.procesando' | transloco }}
+                } @else {
+                    {{ 'testCreator.reintentar' | transloco }}
+                }
             </button>
             }
 
             @if (testEstadoCodigo() === 'C') {
             <button type="button" class="btn-submit btn-info-readonly font-vcr" [disabled]="isExporting()"
                 (click)="abrirModalExportacion($event)">
-                {{ isExporting() ? 'EXPORTANDO...' : '📥 EXPORTAR A MOODLE GIFT' }}
+                @if (isExporting()) {
+                    {{ 'testCreator.exportando' | transloco }}
+                } @else {
+                    {{ 'testCreator.exportar' | transloco }}
+                }
             </button>
             }
             }
@@ -269,13 +289,13 @@
 <div class="pixel-modal-overlay" (click)="cerrarPrevisualizador()">
     <div class="pixel-modal-content tm-card tm-shadow-blue" (click)="$event.stopPropagation()">
         <header class="modal-pdf-header">
-            <span class="font-vcr modal-pdf-title">PREVIEW_MODE.EXE</span>
+            <span class="font-vcr modal-pdf-title">{{ 'testCreator.docReader' | transloco }}</span>
             <button type="button" class="btn-close-modal font-pixel" (click)="cerrarPrevisualizador()">✖</button>
         </header>
         <div class="modal-pdf-body">
             <object [data]="pdfUrlBlob()" type="application/pdf" width="100%" height="100%">
-                <p class="font-pixel text-center">Tu navegador no soporta la vista del PDF. <a [href]="pdfUrlBlob()"
-                        target="_blank">Haz clic aquí para abrirlo</a></p>
+                <p class="font-pixel text-center">{{ 'testCreator.docReaderError' | transloco }} <a [href]="pdfUrlBlob()"
+                        target="_blank">{{ 'testCreator.docReaderOpen' | transloco }}</a></p>
             </object>
         </div>
     </div>
@@ -286,20 +306,20 @@
 <div class="pixel-modal-overlay" (click)="cerrarModalGift()">
     <div class="pixel-modal-content tm-card tm-shadow-blue gift-modal-content" (click)="$event.stopPropagation()">
         <header class="modal-pdf-header">
-            <span class="font-vcr modal-pdf-title">MOODLE_GIFT_EXPORT.TXT</span>
+            <span class="font-vcr modal-pdf-title">{{ 'testCreator.exportMoodleTitle' | transloco }}</span>
             <button type="button" class="btn-close-modal font-pixel" (click)="cerrarModalGift()">✖</button>
         </header>
 
         <div class="gift-modal-body">
             <p class="font-pixel text-muted gift-instruction">
-                Copia este texto y pégalo directamente en la herramienta de importación de Moodle.
+                {{ 'testCreator.exportMoodleSubtitle' | transloco }}
             </p>
 
             <textarea class="pixel-textarea font-pixel gift-textarea" readonly>{{ giftContent() }}</textarea>
 
             <div class="modal-actions no-margin-top">
                 <button type="button" class="btn-submit font-vcr btn-copy" (click)="copiarGiftAlPortapapeles()">
-                    📋 COPIAR AL PORTAPAPELES
+                    {{ 'testCreator.btnCopiar' | transloco }}
                 </button>
             </div>
         </div>

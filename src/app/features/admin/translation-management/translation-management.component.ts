@@ -1,19 +1,21 @@
-import { Component, computed, inject, signal, OnInit } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslationAdminService, InterfazTraduccionModel } from '../../../core/services/translation-admin.service';
 import { IdiomaConfigService } from '../../../core/services/idioma-config.service';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-translation-management',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslocoModule],
   templateUrl: './translation-management.component.html',
   styleUrl: './translation-management.component.css'
 })
-export class TranslationManagementComponent implements OnInit {
+export class TranslationManagementComponent {
   private translationService = inject(TranslationAdminService);
   private idiomaService = inject(IdiomaConfigService);
+  private translocoService = inject(TranslocoService);
 
   public idiomaFiltro = signal<string>('es');
   public terminoBusqueda = signal<string>('');
@@ -116,7 +118,9 @@ export class TranslationManagementComponent implements OnInit {
   }
 
   eliminarClaveDiccionario(clave: string) {
-    const confirmar = confirm(`¿Estás seguro de que deseas eliminar permanentemente la clave "${clave}" y todas sus traducciones asociadas?`);
+    let confirmar = confirm(
+      this.translocoService.translate('admin.gestionLenguajes.confirmarEliminar', { clave: clave })
+    );
 
     if (!confirmar) return;
 

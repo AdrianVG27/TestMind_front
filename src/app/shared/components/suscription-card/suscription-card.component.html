@@ -7,34 +7,45 @@
     <div class="tier-header">
         <h3 class="font-vcr">{{ plan.descripcion || plan.codigo }}</h3>
         <span class="price-tag font-pixel">
-            @if (plan.conf.precio === 0) {
-            GRATIS_
-            } @else {
-            {{ plan.conf.precio | currency:'EUR':'symbol':'1.0-2' }}/mes
-            }
+            {{ 'tierCard.precio' | transloco:{ valor: (plan.conf.precio | currency:'EUR':'symbol':'1.0-2') } }}
         </span>
     </div>
 
     <ul class="tier-features font-pixel">
-        <li>Generación: {{ plan.conf.maxTests }} tests / 24h</li>
         <li>
-            Exportación:
-            @if (plan.conf.maxExportaciones >= 99999) { Ilimitada }
-            @else if (plan.conf.maxExportaciones === 0) { No disponible }
-            @else { {{ plan.conf.maxExportaciones }} / 24h }
+            {{ 'tierCard.features.generacion' | transloco:{ tests: plan.conf.maxTests } }}
         </li>
-        <li>Límite: {{ plan.conf.maxPaginas }} pág. por PDF</li>
-        <li>IA: {{ plan.conf.maxPreguntas }} preguntas por test</li>
+
+        <li>
+            {{ 'tierCard.features.exportacion' | transloco }}
+            @if (plan.conf.maxExportaciones >= 99999) {
+            {{ 'tierCard.features.ilimitada' | transloco }}
+            }
+            @else if (plan.conf.maxExportaciones === 0) {
+            {{ 'tierCard.features.noDisponible' | transloco }}
+            }
+            @else {
+            {{ 'tierCard.features.exportacionLimite' | transloco:{ exportaciones: plan.conf.maxExportaciones } }}
+            }
+        </li>
+
+        <li>
+            {{ 'tierCard.features.limitePdf' | transloco:{ paginas: plan.conf.maxPaginas } }}
+        </li>
+
+        <li>
+            {{ 'tierCard.features.preguntasIa' | transloco:{ preguntas: plan.conf.maxPreguntas } }}
+        </li>
     </ul>
 
     <div class="tier-action-zone">
         @if (currentUserPlan() === plan.codigo.toUpperCase()) {
         <div class="active-plan-container font-pixel">
-            <span class="category-tag default-plan-tag">PLAN_ACTIVO_</span>
+            <span class="category-tag default-plan-tag">{{ 'tierCard.activo' | transloco }}</span>
 
             @if (plan.codigo.toUpperCase() !== 'FREE') {
             <button class="btn-voxel-cancel" (click)="abrirModal()">
-                CANCELAR_SUSCRIPCION_
+                {{ 'tierCard.btnCancel' | transloco }}
             </button>
             }
         </div>
@@ -51,15 +62,15 @@
 <div class="voxel-modal-overlay">
     <div class="voxel-modal-box tm-shadow-red animate-fade-in">
         <div class="voxel-modal-header font-vcr">
-            <h4>¡ADVERTENCIA_SISTEMA!</h4>
+            <h4>{{ 'tierCard.modalCancel.title' | transloco }}</h4>
         </div>
         <div class="voxel-modal-body font-pixel">
-            <p>¿Confirmas que deseas cancelar tu suscripción a TestMind?</p>
-            <p class="txt-warning">Conservarás tus ventajas hasta el final del periodo de facturación actual.</p>
+            <p>{{ 'tierCard.modalCancel.pregunta' | transloco }}</p>
+            <p class="txt-warning">{{ 'tierCard.modalCancel.info' | transloco }}</p>
         </div>
         <div class="voxel-modal-actions font-pixel">
-            <button class="btn-modal-back" (click)="cerrarModal()">VOLVER_</button>
-            <button class="btn-modal-confirm" (click)="confirmarBajaSuscripcion()">CONFIRMAR_BAJA_</button>
+            <button class="btn-modal-back" (click)="cerrarModal()">{{ 'tierCard.modalCancel.btnReturn' | transloco }}</button>
+            <button class="btn-modal-confirm" (click)="confirmarBajaSuscripcion()">{{ 'tierCard.modalCancel.btnConfirm' | transloco }}</button>
         </div>
     </div>
 </div>

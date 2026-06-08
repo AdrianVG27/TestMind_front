@@ -4,11 +4,12 @@ import { CategoriaService } from '../../../core/services/categoria.service';
 import { ProfileMetricService } from '../../../core/services/profile-metric.service';
 import { CatalogoComponent, FiltrosCatalogo } from '../../../shared/components/catalogo/catalogo.component';
 import { IntentoCardComponent } from "../../../shared/components/intento-card/intento-card.component";
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-intento-list',
   standalone: true,
-  imports: [CatalogoComponent, IntentoCardComponent],
+  imports: [CatalogoComponent, IntentoCardComponent, TranslocoModule],
   templateUrl: './intento-list.component.html',
   styleUrl: './intento-list.component.css'
 })

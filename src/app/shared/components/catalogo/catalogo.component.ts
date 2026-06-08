@@ -1,5 +1,6 @@
 import { Component, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { TranslocoModule } from '@ngneat/transloco';
 
 export interface FiltrosCatalogo {
   nombre: string;
@@ -10,7 +11,7 @@ export interface FiltrosCatalogo {
 @Component({
   selector: 'app-catalogo',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, TranslocoModule],
   templateUrl: './catalogo.component.html',
   styleUrl: './catalogo.component.css'
 })
@@ -19,7 +20,7 @@ export class CatalogoComponent {
   paginaActual = input<number>(1);
   totalPaginas = input<number>(1);
   mostrarAvisoVacio = input<boolean>(false);
-  textoVacio = input<string>('No se encontraron elementos con los filtros aplicados.');
+  textoVacio = input<string>();
 
   filtrar = output<FiltrosCatalogo>();
 

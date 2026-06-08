@@ -1,11 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { IntentoResultado } from '../../../core/models/test';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-test-result',
   standalone: true,
-  imports: [],
+  imports: [TranslocoModule],
   templateUrl: './test-result.component.html',
   styleUrl: './test-result.component.css'
 })

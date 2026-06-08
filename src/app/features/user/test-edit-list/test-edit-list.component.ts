@@ -5,11 +5,12 @@ import { TestService } from '../../../core/services/test.service';
 import { Router } from '@angular/router';
 import { CategoriaService } from '../../../core/services/categoria.service';
 import { EstadoService } from '../../../core/services/estado.service';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-test-edit-list',
   standalone: true,
-  imports: [CatalogoComponent, TestStatusCardComponent],
+  imports: [CatalogoComponent, TestStatusCardComponent, TranslocoModule],
   templateUrl: './test-edit-list.component.html',
   styleUrl: './test-edit-list.component.css'
 })

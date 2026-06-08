@@ -11,11 +11,12 @@ import { GetEstadoPipe } from "../../../shared/pipes/get-estado.pipe";
 import { EstadoService } from '../../../core/services/estado.service';
 import { GetTierPipe } from "../../../shared/pipes/get-tier.pipe";
 import { SuscriptionService } from '../../../core/services/suscription.service';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, GetCategoriaPipe, GetEstadoPipe, GetTierPipe],
+  imports: [CommonModule, FormsModule, GetCategoriaPipe, GetEstadoPipe, GetTierPipe, TranslocoModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -27,6 +28,7 @@ export class ProfileComponent {
   private estadoService = inject(EstadoService);
   private tierService = inject(SuscriptionService);
   private router = inject(Router);
+  private translocoService = inject(TranslocoService);
 
   public mostrarModalConfig = signal<boolean>(false);
   public cargando = signal<boolean>(true);
@@ -118,7 +120,7 @@ export class ProfileComponent {
     this.erroresValidacion.set(null);
 
     if (datos.password && datos.password !== datos.password_confirmation) {
-      this.msjError.set('Las contraseñas no coinciden');
+      this.msjError.set(this.translocoService.translate('profile.config.errorPasswords'));
       return;
     }
 
@@ -138,9 +140,6 @@ export class ProfileComponent {
       error: (err) => {
         if (err.status === 422) {
           this.erroresValidacion.set(err.error?.errors);
-        }
-        else if (err.status !== 500 && err.status !== 401 && err.status !== 0 && err.status !== 403) {
-          this.msjError.set(err.error?.message || 'Error al actualizar perfil');
         }
       }
     });

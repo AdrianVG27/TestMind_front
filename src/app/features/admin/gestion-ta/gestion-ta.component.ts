@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TablaApoyoService } from '../../../core/services/tabla-apoyo-service.service';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-gestion-ta',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslocoModule],
   templateUrl: './gestion-ta.component.html',
   styleUrl: './gestion-ta.component.css'
 })
@@ -68,7 +69,7 @@ export class GestionTAComponent {
       next: () => this.isProcessing.set(false),
       error: () => {
         this.isProcessing.set(false);
-        this.errorMessage.set('Error al recuperar el catálogo de tablas de apoyo.');
+        console.error('Error al recuperar el catálogo de tablas de apoyo.');
       }
     });
   }
@@ -103,7 +104,7 @@ export class GestionTAComponent {
       next: () => this.isProcessing.set(false),
       error: () => {
         this.isProcessing.set(false);
-        this.errorMessage.set('No se pudieron leer los registros de la tabla seleccionada.');
+        console.error('No se pudieron leer los registros de la tabla seleccionada.');
       }
     });
   }
@@ -155,7 +156,6 @@ export class GestionTAComponent {
 
     this.apiService.crearRegistro(idTabla, payload).subscribe({
       next: (res) => {
-        this.successMessage.set(res.message || 'Nuevo registro inyectado correctamente.');
         this.cancelarCreacion();
         this.cargarFilas(idTabla);
         this.cargarCatalogo();
@@ -164,8 +164,6 @@ export class GestionTAComponent {
         this.isProcessing.set(false);
         if (err.status === 422) {
           this.erroresValidacion.set(err.error?.errors);
-        } else if (err.status !== 500 && err.status !== 401 && err.status !== 0 && err.status !== 403) {
-          this.errorMessage.set(err.error?.error || 'Error al persistir el nuevo registro auxiliar.');
         }
       }
     });
@@ -203,11 +201,10 @@ export class GestionTAComponent {
     if (!idTabla || !idFila || !payload) return;
 
     this.isProcessing.set(true);
-    this.limpiarMensajes(); // 🧹 Limpiar antes de guardar
+    this.limpiarMensajes();
 
     this.apiService.actualizarRegistro(idTabla, idFila, payload).subscribe({
       next: (res) => {
-        this.successMessage.set(res.message || 'Registro actualizado con éxito.');
         this.cancelarEdicion();
         this.cargarFilas(idTabla);
       },
@@ -215,8 +212,6 @@ export class GestionTAComponent {
         this.isProcessing.set(false);
         if (err.status === 422) {
           this.erroresValidacion.set(err.error?.errors);
-        } else if (err.status !== 500 && err.status !== 401 && err.status !== 0 && err.status !== 403) {
-          this.errorMessage.set(err.error?.error || 'Error al procesar la actualización.');
         }
       }
     });
@@ -243,7 +238,6 @@ export class GestionTAComponent {
 
     this.apiService.eliminarRegistro(idTabla, idFila).subscribe({
       next: () => {
-        this.successMessage.set('Registro eliminado correctamente de la tabla.');
         this.idFilaParaBorrar.set(null);
         this.cancelarEdicion();
         this.cargarFilas(idTabla);
@@ -251,9 +245,6 @@ export class GestionTAComponent {
       error: (err) => {
         this.isProcessing.set(false);
         this.idFilaParaBorrar.set(null);
-        if (err.status !== 500 && err.status !== 401 && err.status !== 0 && err.status !== 403) {
-          this.errorMessage.set(err.error?.error || 'No se pudo borrar la fila. Comprueba si está siendo usada como llave foránea.');
-        }
       }
     });
   }
@@ -277,7 +268,7 @@ export class GestionTAComponent {
       },
       error: () => {
         this.isProcessing.set(false);
-        this.errorMessage.set('No se pudieron recuperar las traducciones asociadas.');
+        console.error('No se pudieron recuperar las traducciones asociadas.');
       }
     });
   }
@@ -308,15 +299,11 @@ export class GestionTAComponent {
     this.isProcessing.set(true);
     this.apiService.guardarTraduccionesFila(idTabla, fila.id, this.traduccionesCargadas()).subscribe({
       next: (res) => {
-        this.successMessage.set(res.message || 'Idiomas actualizados correctamente.');
         this.cerrarModal();
         this.cargarFilas(idTabla);
       },
       error: (err) => {
         this.isProcessing.set(false);
-        if (err.status !== 500 && err.status !== 401 && err.status !== 0 && err.status !== 403) {
-          this.errorMessage.set(err.error?.error || 'Error crítico al actualizar las traducciones.');
-        }
       }
     });
   }

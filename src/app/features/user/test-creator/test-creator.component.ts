@@ -7,11 +7,12 @@ import { TestService } from '../../../core/services/test.service';
 import { CategoriaService } from '../../../core/services/categoria.service';
 import { forkJoin, of } from 'rxjs';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-test-creator',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, TranslocoModule],
   templateUrl: './test-creator.component.html',
   styleUrl: './test-creator.component.css'
 })
@@ -21,6 +22,7 @@ export class TestCreatorComponent {
   private catService = inject(CategoriaService);
   private router = inject(Router);
   private sanitizer = inject(DomSanitizer);
+  private translocoService = inject(TranslocoService);
 
   testId!: number | null;
   documentSource = signal<'upload' | 'existing'>('upload');
@@ -94,7 +96,7 @@ export class TestCreatorComponent {
 
   ngOnInit() {
     this.isProcessing.set(true);
-    this.statusMessage.set('Sincronizando registros académicos...');
+    this.statusMessage.set(this.translocoService.translate('testCreator.loading'));
 
     forkJoin({
       cats: this.catService.index(),
@@ -172,7 +174,7 @@ export class TestCreatorComponent {
 
   obtenerNombreCategoria(codigo: string): string {
     const cat = this.categorias().find(c => c.codigo === codigo);
-    return cat ? cat.descripcion : 'General';
+    return cat ? cat.descripcion : this.translocoService.translate('pipes.categoriaNoData');
   }
 
   seleccionarDocumentoLocal(doc: any) {
@@ -188,7 +190,6 @@ export class TestCreatorComponent {
 
   abrirPrevisualizador(idDoc: number, event: Event) {
     event.stopPropagation();
-    this.statusMessage.set('Cargando flujo d previsualización...');
     this.docService.descargarDocumento(idDoc).subscribe({
       next: (blob) => {
         this.statusMessage.set(null);
@@ -215,7 +216,7 @@ export class TestCreatorComponent {
       this.erroresValidacion.set(null);
     } else {
       this.selectedFile = null;
-      this.errorMessage.set('El archivo debe ser un PDF válido.');
+      this.errorMessage.set(this.translocoService.translate('testCreator.docNoValido'));
     }
   }
 
@@ -235,8 +236,6 @@ export class TestCreatorComponent {
     this.erroresValidacion.set(null);
 
     if (this.isReadOnlyMode()) {
-      this.statusMessage.set('Reiniciando hilos del servidor. Inyectando IA de nuevo...');
-
       const reintentoPayload = {
         documento_id: this.testForm.documento_id()!,
         titulo: this.testForm.titulo(),
@@ -262,8 +261,6 @@ export class TestCreatorComponent {
 
           if (err.status === 422) {
             this.erroresValidacion.set(err.error?.errors);
-          } else if (err.status !== 403 && err.status !== 500) {
-            this.errorMessage.set(err.error?.message || 'Error en el proceso d generación.');
           }
         }
       });
@@ -272,26 +269,23 @@ export class TestCreatorComponent {
 
     const sumaProp = this.testForm.prop_unica() + this.testForm.prop_multi() + this.testForm.prop_escribir();
     if (sumaProp !== 100) {
-      this.errorMessage.set('La suma de las proporciones debe ser exactamente 100%.');
+      this.errorMessage.set(this.translocoService.translate('testCreator.errorProp'));
       this.isProcessing.set(false);
       return;
     }
 
     let ejecucionObservable$;
     if (this.documentSource() === 'upload' && this.selectedFile) {
-      this.statusMessage.set('Subiendo archivo PDF al servidor...');
       const docData = new FormData();
       docData.append('pdf', this.selectedFile);
       docData.append('categoria_codigo', this.testForm.categoria_codigo()!);
       docData.append('isPublic', this.testForm.isPublic() ? '1' : '0');
       ejecucionObservable$ = this.docService.subirDocumento(docData);
     } else {
-      this.statusMessage.set('Parámetros confirmados. Inicializando motor d IA...');
       ejecucionObservable$ = of({ id: this.testForm.documento_id() });
     }
 
     ejecucionObservable$.pipe(
-      tap(() => this.statusMessage.set('Configurando parámetros e inyectando IA...')),
       switchMap((docInstancia: any) => {
         const testPayload = {
           documento_id: docInstancia.id,
@@ -319,11 +313,10 @@ export class TestCreatorComponent {
 
         if (err.status === 422) {
           this.erroresValidacion.set(err.error?.errors);
-        } else if (err.status !== 403 && err.status !== 500) {
-          this.errorMessage.set(err.error?.message || 'Error en el proceso d generación.');
         }
       }
     });
+
   }
 
   abrirModalExportacion(event: Event) {
@@ -331,7 +324,6 @@ export class TestCreatorComponent {
     if (!this.testId || this.testEstadoCodigo() !== 'C') return;
 
     this.isExporting.set(true);
-    this.statusMessage.set('Generando formato Moodle GIFT...');
 
     this.testService.exportarMoodleGift(this.testId).subscribe({
       next: (res) => {
@@ -353,9 +345,6 @@ export class TestCreatorComponent {
   }
 
   copiarGiftAlPortapapeles() {
-    navigator.clipboard.writeText(this.giftContent()).then(() => {
-      this.statusMessage.set('¡Texto copiado al portapapeles!');
-      setTimeout(() => this.statusMessage.set(null), 3000);
-    });
+    navigator.clipboard.writeText(this.giftContent());
   }
 }

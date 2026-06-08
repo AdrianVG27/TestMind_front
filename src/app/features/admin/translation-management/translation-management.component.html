@@ -1,5 +1,5 @@
 <div class="admin-dashboard-layout">
-    <h1 class="font-vcr pixel-title">CORE_ADMIN_PANEL // INTERFACE_DICTIONARY</h1>
+    <h1 class="font-vcr pixel-title">{{ 'admin.gestionLenguajes.titulo' | transloco }}</h1>
 
     <div class="lang-tabs-container">
         @for (idioma of idiomasDisponibles(); track idioma.codigo) {
@@ -12,21 +12,21 @@
 
     <section class="tm-card tm-shadow-blue tm-panel-breathing">
         <header class="panel-header text-between">
-            <h3 class="font-vcr">DICCIONARIO ACTIVO: {{ idiomaFiltro() | uppercase }}</h3>
+            <h3 class="font-vcr">{{ 'admin.gestionLenguajes.seleccionado' | transloco }} {{ idiomaFiltro() | uppercase }}</h3>
             @if (isLoading()) {
-            <span class="loading-tag font-pixel animate-pulse">SINKRONIZANDO...</span>
+            <span class="loading-tag font-pixel animate-pulse">{{ 'admin.gestionLenguajes.loading' | transloco }}</span>
             }
         </header>
 
         <div class="toolbar-cyber">
             <div class="search-box">
                 <span class="search-icon font-vcr">></span>
-                <input type="text" [placeholder]="'FILTRAR POR VARIABLE O CONTENIDO...'" [value]="terminoBusqueda()"
+                <input type="text" [placeholder]="( 'admin.gestionLenguajes.filtrado' | transloco )" [value]="terminoBusqueda()"
                     (input)="actualizarBusqueda($any($event.target).value)" class="search-input font-pixel" />
             </div>
 
             <button (click)="abrirModalCrear()" class="btn-action-cyber font-vcr">
-                [+] NUEVA CLAVE
+                [+] {{ 'admin.gestionLenguajes.new' | transloco }}
             </button>
         </div>
 
@@ -34,9 +34,9 @@
             <table class="tm-pixel-table">
                 <thead>
                     <tr class="font-vcr">
-                        <th style="width: 35%;">VARIABLE (CLAVE)</th>
-                        <th style="width: 60%;">LITERAL TEXTUAL (VALOR EN BD)</th>
-                        <th style="width: 5%; text-align: center;">AKCIÓN</th>
+                        <th class="col-key">{{ 'admin.gestionLenguajes.key' | transloco }}</th>
+                        <th class="col-value">{{ 'admin.gestionLenguajes.descripcion' | transloco }}</th>
+                        <th class="col-actions">{{ 'admin.gestionLenguajes.botonera' | transloco }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,9 +49,8 @@
                                 (keydown.enter)="guardarCambioEnLinea(item, inputValor.value); inputValor.blur()"
                                 class="inline-edit-input font-pixel" />
                         </td>
-                        <td style="text-align: center;">
-                            <button (click)="eliminarClaveDiccionario(item.clave)" title="Purgar variable"
-                                class="btn-delete-cyber font-vcr">
+                        <td class="cell-center">
+                            <button (click)="eliminarClaveDiccionario(item.clave)" class="btn-delete-cyber font-vcr">
                                 [X]
                             </button>
                         </td>
@@ -59,7 +58,7 @@
                     } @empty {
                     <tr>
                         <td colspan="3" class="empty-notice font-pixel">
-                            NO SE DETECTARON LITERALES QUE COINCIDAN CON LOS CRITERIOS.
+                            {{ 'admin.gestionLenguajes.noData' | transloco }}
                         </td>
                     </tr>
                     }
@@ -72,28 +71,28 @@
     <div class="cyber-modal-overlay">
         <div class="cyber-modal tm-card tm-shadow-blue">
             <header class="panel-header">
-                <h3 class="font-vcr highlight-mint">// REGISTRAR_NUEVA_VARIABLE</h3>
+                <h3 class="font-vcr highlight-mint">// {{ 'admin.gestionLenguajes.titleNew' | transloco }}</h3>
             </header>
 
             <div class="modal-body font-pixel">
                 <div class="form-group">
-                    <label class="font-vcr">IDENTIFICADOR (CLAVE DOT-NOTATION):</label>
-                    <input type="text" [(ngModel)]="nuevaClave" placeholder="ej: auth.welcome_message"
+                    <label class="font-vcr">{{ 'admin.gestionLenguajes.keyNew' | transloco }}</label>
+                    <input type="text" [(ngModel)]="nuevaClave" [placeholder]="'admin.gestionLenguajes.ejemploNew' | transloco"
                         class="inline-edit-input" />
 
                     @if (erroresValidacion()?.clave) {
-                    <small class="pixel-validation-error animate-pulse" style="margin-top: 0.4rem;">
+                    <small class="pixel-validation-error animate-pulse validation-margin">
                         {{ erroresValidacion().clave[0] }}
                     </small>
                     }
                 </div>
                 <div class="form-group">
-                    <label class="font-vcr">CONTENIDO TEXTUAL (VALOR):</label>
-                    <input type="text" [(ngModel)]="nuevoValor" placeholder="Texto que se renderizará..."
+                    <label class="font-vcr">{{ 'admin.gestionLenguajes.descripcionNew' | transloco }}</label>
+                    <input type="text" [(ngModel)]="nuevoValor" [placeholder]="'admin.gestionLenguajes.ejemploDescripcionNew' | transloco"
                         class="inline-edit-input" />
 
                     @if (erroresValidacion()?.valor) {
-                    <small class="pixel-validation-error animate-pulse" style="margin-top: 0.4rem;">
+                    <small class="pixel-validation-error animate-pulse validation-margin">
                         {{ erroresValidacion().valor[0] }}
                     </small>
                     }
@@ -101,9 +100,9 @@
             </div>
 
             <footer class="modal-footer">
-                <button (click)="cerrarModal()" class="btn-cancel font-vcr">CANCELAR</button>
+                <button (click)="cerrarModal()" class="btn-cancel font-vcr">{{ 'admin.gestionLenguajes.btnCancel' | transloco }}</button>
                 <button (click)="crearNuevaTraduccion()" [disabled]="isLoading()"
-                    class="btn-action-cyber font-vcr">INYECTAR EN CORE</button>
+                    class="btn-action-cyber font-vcr">{{ 'admin.gestionLenguajes.btnSave' | transloco }}</button>
             </footer>
         </div>
     </div>

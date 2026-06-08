@@ -1,12 +1,13 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { PieChartComponent } from '../../../shared/components/pie-chart/pie-chart.component';
-import { LineChartComponent } from '../../../shared/components/line-chart/line-chart.component'; // 🚀 Importación del nuevo componente
+import { LineChartComponent } from '../../../shared/components/line-chart/line-chart.component';
 import { AdminMetricService } from '../../../core/services/admin-metric.service';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [PieChartComponent, LineChartComponent],
+  imports: [PieChartComponent, LineChartComponent, TranslocoModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })

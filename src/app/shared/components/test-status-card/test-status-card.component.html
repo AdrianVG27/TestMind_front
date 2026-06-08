@@ -1,6 +1,6 @@
 <div class="tm-card tm-shadow-blue voxel-card" (click)="onCardClick()">
     <div class="card-main-info">
-        <h3 class="font-vcr">{{ test().titulo || 'Cuestionario Eliminado' }}</h3>
+        <h3 class="font-vcr">{{ test().titulo || '' }}</h3>
         <span class="category-tag font-pixel">
             {{ test().categoria_codigo | getCategoria: categorias() }}
         </span>

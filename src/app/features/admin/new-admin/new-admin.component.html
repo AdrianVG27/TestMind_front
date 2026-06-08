@@ -4,7 +4,7 @@
         <div class="tm-card tm-shadow-mint voxel-card-size">
 
             <h2 class="pixel-title font-vcr">
-                {{ 'FORJAR_ADMIN' | transloco }}
+                {{ 'admin.new_admin.titulo' | transloco }}
             </h2>
 
             @if (statusMessage()) {
@@ -21,13 +21,13 @@
 
             <form (ngSubmit)="onFormSubmit()" class="modal-form">
 
-                <fieldset [disabled]="isProcessing()"
-                    style="border: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.2rem;">
+                <fieldset [disabled]="isProcessing()" class="tm-fieldset">
 
                     <div class="form-field">
-                        <span class="font-pixel label-style">NOMBRE COMPLETO</span>
+                        <span class="font-pixel label-style">{{ 'admin.new_admin.labelName' | transloco }}</span>
                         <input type="text" [ngModel]="adminForm.name()" (ngModelChange)="adminForm.name.set($event)"
-                            name="name" required class="pixel-input font-pixel" placeholder="Escribe el nombre...">
+                            name="name" required class="pixel-input font-pixel"
+                            placeholder="{{ 'admin.new_admin.placeholderName' | transloco }}">
 
                         @if (erroresValidacion()?.name) {
                         <small class="font-pixel animate-pulse pixel-validation-error">
@@ -37,9 +37,10 @@
                     </div>
 
                     <div class="form-field">
-                        <span class="font-pixel label-style">CORREO CORPORATIVO</span>
+                        <span class="font-pixel label-style">{{ 'admin.new_admin.email' | transloco }}</span>
                         <input type="email" [ngModel]="adminForm.email()" (ngModelChange)="adminForm.email.set($event)"
-                            name="email" required class="pixel-input font-pixel" placeholder="admin@tudominio.com">
+                            name="email" required class="pixel-input font-pixel"
+                            placeholder="{{ 'admin.new_admin.placeholderEmail' | transloco }}">
 
                         @if (erroresValidacion()?.email) {
                         <small class="font-pixel animate-pulse pixel-validation-error">
@@ -49,7 +50,7 @@
                     </div>
 
                     <div class="form-field">
-                        <span class="font-pixel label-style">CONTRASEÑA DE ACCESO</span>
+                        <span class="font-pixel label-style">{{ 'admin.new_admin.password' | transloco }}</span>
                         <input type="password" [ngModel]="adminForm.password()"
                             (ngModelChange)="adminForm.password.set($event)" name="password" required
                             class="pixel-input font-pixel" placeholder="••••••••">
@@ -62,7 +63,7 @@
                     </div>
 
                     <div class="form-field">
-                        <span class="font-pixel label-style">CONFIRMAR CONTRASEÑA</span>
+                        <span class="font-pixel label-style">{{ 'admin.new_admin.confirmPassword' | transloco }}</span>
                         <input type="password" [ngModel]="adminForm.password_confirmation()"
                             (ngModelChange)="adminForm.password_confirmation.set($event)" name="password_confirmation"
                             required class="pixel-input font-pixel" placeholder="••••••••">
@@ -72,7 +73,11 @@
 
                 <div class="form-actions-zone space-top">
                     <button type="submit" class="btn-submit font-vcr" [disabled]="isProcessing() || !isFormValid()">
-                        {{ isProcessing() ? 'COMPILANDO...' : 'EJECUTAR_ALTA ➔' }}
+                        @if (isProcessing()) {
+                        {{ 'admin.new_admin.procesando' | transloco }}
+                        } @else {
+                        {{ 'admin.new_admin.crear' | transloco }}
+                        }
                     </button>
                 </div>
 

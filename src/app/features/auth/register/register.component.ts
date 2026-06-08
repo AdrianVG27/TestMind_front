@@ -46,9 +46,6 @@ export class RegisterComponent {
         if (err.status === 422) {
           this.erroresValidacion.set(err.error?.errors);
         }
-        else if (err.status !== 500 && err.status !== 401 && err.status !== 0) {
-          this.errorMessage.set(err.error?.message || 'Error al intentar crear la cuenta.');
-        }
       }
     });
   }

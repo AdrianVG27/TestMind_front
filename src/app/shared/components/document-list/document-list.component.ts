@@ -4,11 +4,12 @@ import { CategoriaService } from '../../../core/services/categoria.service';
 import { Router } from '@angular/router';
 import { CatalogoComponent, FiltrosCatalogo } from '../catalogo/catalogo.component';
 import { DocumentCardComponent } from '../document-card/document-card.component';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-document-list',
   standalone: true,
-  imports: [CatalogoComponent, DocumentCardComponent],
+  imports: [CatalogoComponent, DocumentCardComponent, TranslocoModule],
   templateUrl: './document-list.component.html',
   styleUrl: './document-list.component.css'
 })

@@ -21,6 +21,7 @@ export class UserNavComponent {
   public listaPlanes = this.suscriptionService.planList;
   public isAuthenticated = this.authService.isAuthenticated;
   public userPlan = this.authService.userPlan;
+  public userNickname = this.authService.nickname;
 
   public isMenuOpen = signal<boolean>(false);
   public isUserMenuOpen = signal<boolean>(false);

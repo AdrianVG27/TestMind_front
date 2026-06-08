@@ -1,0 +1,15 @@
+<div class="tm-card tm-shadow-blue voxel-card" (click)="onCardClick()">
+    <div class="card-main-info">
+        <h3 class="font-vcr">{{ intento().test?.titulo || '' }}</h3>
+        <span class="category-tag font-pixel">
+            {{ intento().test?.documento?.categoria?.nombre_traducido || '' }}
+        </span>
+    </div>
+
+    <div class="card-badge-zone">
+        <span class="row-badge font-pixel" [class.badge-pass]="intento().nota >= 5"
+            [class.badge-fail]="intento().nota < 5">
+            {{ intento().nota }}
+        </span>
+    </div>
+</div>

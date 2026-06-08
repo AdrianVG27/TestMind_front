@@ -1,0 +1,119 @@
+.dropdown-wrapper {
+    position: relative;
+}
+
+.btn-user-trigger {
+    color: var(--mint);
+    border: 1px dashed var(--border-blue);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background: transparent;
+    transition: all 0.2s;
+}
+
+.btn-user-trigger:hover {
+    border-style: solid;
+    background-color: rgba(92, 240, 165, 0.1);
+    box-shadow: 0 0 8px var(--mint-glow);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 130%;
+    right: 0;
+    min-width: 200px;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    z-index: 1000;
+    animation: fadeIn 0.15s ease-out;
+}
+
+.dropdown-content.desktop-open {
+    display: flex;
+}
+
+.dropdown-item {
+    text-align: left;
+    color: var(--text-main);
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: all 0.1s;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: transparent;
+    font-size: 1.1rem;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(26, 75, 132, 0.4);
+    color: var(--mint);
+    border-color: var(--border-blue);
+}
+
+.plan-tag {
+    background-color: var(--mint);
+    color: var(--bg-main);
+    padding: 6px 8px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: 2px solid var(--border-blue);
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.plan-tag:hover {
+    transform: scale(1.02);
+}
+
+.btn-logout-drop {
+    color: var(--error);
+}
+
+.btn-logout-drop:hover {
+    background-color: var(--error-bg);
+    color: var(--error);
+    border-color: var(--error);
+}
+
+.dropdown-divider {
+    border: 0;
+    border-top: 1px dashed var(--border-subtle);
+    margin: 0.25rem 0;
+}
+
+@media screen and (max-width: 768px) {
+    .dropdown-content {
+        display: flex !important;
+        position: relative;
+        top: 0;
+        width: 100%;
+        box-sizing: border-box;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+    }
+
+    .dropdown-item {
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .plan-tag {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .btn-user-trigger {
+        display: none;
+    }
+}

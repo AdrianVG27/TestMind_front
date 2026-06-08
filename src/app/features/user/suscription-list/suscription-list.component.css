@@ -1,0 +1,14 @@
+.suscription-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.suscription-grid app-suscription-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}

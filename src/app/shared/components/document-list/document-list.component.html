@@ -1,0 +1,17 @@
+<app-catalogo 
+    [categorias]="categorias()" 
+    [paginaActual]="paginaActual()" 
+    [totalPaginas]="totalPaginas()"
+    [mostrarAvisoVacio]="documentos().length === 0"
+    [textoVacio]="'listas.textoVacioDoc' | transloco"
+    (filtrar)="onFiltrar($event)">
+
+    @for (doc of documentos(); track doc.id) {
+        <app-document-card 
+            [doc]="doc" 
+            [categorias]="categorias()" 
+            (clickCard)="verDocumento($event)">
+        </app-document-card>
+    }
+    
+</app-catalogo>

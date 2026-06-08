@@ -1,0 +1,54 @@
+<div class="auth-container">
+    <div class="tm-card tm-shadow-blue voxel-card-size">
+        <h2 class="pixel-title font-vcr">{{ 'auth.login_title' | transloco }}</h2>
+
+        @if (errorMessage()) {
+        <div class="error-notice space-bottom">{{ errorMessage() }}</div>
+        }
+
+        <form (ngSubmit)="handleLogin()" class="modal-form">
+            <div class="form-field">
+                <span class="font-pixel label-style">{{ 'auth.email' | transloco }}</span>
+                <input type="email" [(ngModel)]="credentials.email" name="email" required
+                    class="pixel-input font-pixel">
+                
+                @if (erroresValidacion()?.email) {
+                    <small class="pixel-validation-error animate-pulse">
+                        {{ erroresValidacion().email[0] }}
+                    </small>
+                }
+            </div>
+
+            <div class="form-field">
+                <span class="font-pixel label-style">{{ 'auth.password' | transloco }}</span>
+                <input type="password" [(ngModel)]="credentials.password" name="password" required class="pixel-input">
+                
+                @if (erroresValidacion()?.password) {
+                    <small class="pixel-validation-error animate-pulse">
+                        {{ erroresValidacion().password[0] }}
+                    </small>
+                }
+            </div>
+
+            <div class="remember-field">
+                <label class="remember-label font-pixel">
+                    <input type="checkbox" [(ngModel)]="credentials.remember" name="remember" class="pixel-checkbox">
+                    <span class="checkbox-text">{{ 'auth.remember_me' | transloco }}</span>
+                </label>
+            </div>
+
+            <button type="submit" class="btn-submit font-vcr">
+                {{ 'auth.login_btn' | transloco }}
+            </button>
+        </form>
+
+        <p class="switch-auth font-pixel">
+            {{ 'auth.no_account' | transloco }}
+            @if (hayTestPendiente) {
+            <a href="#" (click)="cambiarAModalRegistro($event)" class="auth-link">{{ 'auth.register_link' | transloco }}</a>
+            } @else {
+            <a routerLink="/register" class="auth-link">{{ 'auth.register_link' | transloco }}</a>
+            }
+        </p>
+    </div>
+</div>

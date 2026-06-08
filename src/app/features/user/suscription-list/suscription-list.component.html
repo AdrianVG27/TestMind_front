@@ -1,0 +1,20 @@
+<div class="view-container-900">
+    <h2 class="pixel-title font-vcr">{{ 'suscriptionList.title' | transloco }}</h2>
+
+    @if (cargandoEcosistema() || !sdkListo()) {
+    <div class="loading-box font-pixel">
+        <div class="spinner"></div>
+        <p>{{ 'suscriptionList.loading' | transloco }}</p>
+    </div>
+    } @else {
+    <div class="suscription-grid">
+        @for (item of planes(); track item.id) {
+        <app-suscription-card [plan]="item"></app-suscription-card>
+        } @empty {
+        <div class="error-notice font-pixel">
+            {{ 'suscriptionList.noData' | transloco }}
+        </div>
+        }
+    </div>
+    }
+</div>

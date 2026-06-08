@@ -1,0 +1,87 @@
+.select-option-placeholder,
+.select-option-dark {
+    background-color: var(--bg-card);
+}
+
+.select-option-placeholder {
+    color: var(--text-muted);
+}
+
+.actions-column-width {
+    width: 280px;
+}
+
+.modal-subtitle-context {
+    font-size: 0.85rem;
+    margin: -0.75rem 0 1.5rem 0;
+}
+
+.modal-box-danger {
+    border-color: var(--error) !important;
+    box-shadow: 8px 8px 0px var(--error) !important;
+}
+
+.modal-header-danger {
+    border-bottom-color: rgba(255, 107, 107, 0.3) !important;
+}
+
+.text-danger-color,
+.btn-close-danger {
+    color: var(--error) !important;
+}
+
+.btn-save-danger {
+    background-color: var(--error) !important;
+    color: var(--bg-main) !important;
+}
+
+.critical-notice-spacing {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.table-title {
+    color: var(--text-main);
+    margin: 0;
+}
+
+.table-validation-error {
+    margin-top: 0.1rem;
+    display: block;
+    font-size: 1rem;
+}
+
+.modal-label-small {
+    font-size: 0.9rem;
+}
+
+.modal-field-title {
+    color: var(--mint);
+    text-transform: uppercase;
+}
+
+.modal-actions-spaced {
+    margin-top: 1.5rem;
+}
+
+.modal-actions-danger {
+    margin-top: 2rem;
+}
+
+.modal-warning-text {
+    color: var(--text-main);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.modal-confirm-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-main);
+}
+
+.modal-confirm-subtext {
+    font-size: 0.85rem;
+    margin-top: -0.5rem;
+}

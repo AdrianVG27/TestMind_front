@@ -1,0 +1,34 @@
+/* TODO Importar fuentes */
+
+/* Paleta TestMind */
+:root {
+    --bg-dark: #18222D;
+    --blue-tech: #1A4B84;
+    --mint: #5CF0A5;
+}
+
+/* Estilo Vóxel/Pixel-art para contenedores */
+.voxel-panel {
+    background: var(--bg-dark);
+    border: 4px solid var(--blue-tech);
+    box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    image-rendering: pixelated;
+}
+
+.btn-tm {
+    background: var(--mint);
+    color: var(--bg-dark);
+    border: none;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    padding: 10px 20px;
+    box-shadow: 4px 4px 0px var(--blue-tech);
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.btn-tm:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px var(--blue-tech);
+}

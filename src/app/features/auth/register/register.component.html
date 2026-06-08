@@ -1,0 +1,69 @@
+<div class="auth-container">
+    <div class="tm-card tm-shadow-blue voxel-card-size">
+        <h2 class="pixel-title font-vcr">{{ 'auth.register_title' | transloco }}</h2>
+
+        @if (errorMessage()) {
+        <div class="error-notice space-bottom">{{ errorMessage() }}</div>
+        }
+
+        <form (ngSubmit)="handleRegister()" class="modal-form">
+            <div class="form-field">
+                <span class="font-pixel label-style">{{ 'auth.name' | transloco }}</span>
+                <input type="text" [(ngModel)]="form.name" name="name" required class="pixel-input font-pixel">
+
+                @if (erroresValidacion()?.name) {
+                <small class="pixel-validation-error animate-pulse">
+                    {{ erroresValidacion().name[0] }}
+                </small>
+                }
+            </div>
+
+            <div class="form-field">
+                <span class="font-pixel label-style">{{ 'auth.email' | transloco }}</span>
+                <input type="email" [(ngModel)]="form.email" name="email" required class="pixel-input font-pixel">
+
+                @if (erroresValidacion()?.email) {
+                <small class="pixel-validation-error animate-pulse">
+                    {{ erroresValidacion().email[0] }}
+                </small>
+                }
+            </div>
+
+            <div class="form-field">
+                <span class="font-pixel label-style">{{ 'auth.password' | transloco }}</span>
+                <input type="password" [(ngModel)]="form.password" name="password" required class="pixel-input">
+
+                @if (erroresValidacion()?.password) {
+                <small class="pixel-validation-error animate-pulse">
+                    {{ erroresValidacion().password[0] }}
+                </small>
+                }
+            </div>
+
+            <div class="form-field">
+                <span class="font-pixel label-style">{{ 'auth.confirm_password' | transloco }}</span>
+                <input type="password" [(ngModel)]="form.password_confirmation" name="password_confirmation" required
+                    class="pixel-input">
+
+                @if (erroresValidacion()?.password_confirmation) {
+                <small class="pixel-validation-error animate-pulse">
+                    {{ erroresValidacion().password_confirmation[0] }}
+                </small>
+                }
+            </div>
+
+            <button type="submit" class="btn-submit font-vcr">
+                {{ 'auth.register_btn' | transloco }}
+            </button>
+        </form>
+
+        <p class="switch-auth font-pixel">
+            {{ 'auth.have_account' | transloco }}
+            @if (hayTestPendiente) {
+            <a href="#" (click)="cambiarAModalLogin($event)" class="auth-link">{{ 'auth.login_link' | transloco }}</a>
+            } @else {
+            <a routerLink="/login" class="auth-link">{{ 'auth.login_link' | transloco }}</a>
+            }
+        </p>
+    </div>
+</div>

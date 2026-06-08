@@ -1,0 +1,29 @@
+.active-conf {
+    color: var(--mint);
+}
+
+.btn-icon-admin {
+    color: var(--text-muted);
+    transition: color 0.2s, transform 0.2s;
+    padding: 4px;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.btn-icon-admin:hover {
+    color: var(--mint);
+    transform: rotate(90deg);
+}
+
+@media screen and (max-width: 768px) {
+    .btn-icon-admin {
+        width: 100%;
+        text-align: center;
+        padding: 0.5rem;
+        border: 1px solid var(--border-subtle);
+        border-radius: 4px;
+        margin-top: 0.5rem;
+        border: none;
+    }
+}

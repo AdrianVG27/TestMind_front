@@ -1,0 +1,10 @@
+<app-catalogo [categorias]="categorias()" [paginaActual]="paginaActual()" [totalPaginas]="totalPaginas()"
+    [mostrarAvisoVacio]="tests().length === 0" [textoVacio]="'listas.textoVacio' | transloco"
+    (filtrar)="onFiltrar($event)">
+
+    @for (test of tests(); track test.id) {
+    <app-test-status-card [test]="test" [categorias]="categorias()" [estados]="estados()" (clickCard)="verTest($event)">
+    </app-test-status-card>
+    }
+
+</app-catalogo>

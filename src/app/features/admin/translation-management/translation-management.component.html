@@ -1,0 +1,110 @@
+<div class="admin-dashboard-layout">
+    <h1 class="font-vcr pixel-title">{{ 'admin.gestionLenguajes.titulo' | transloco }}</h1>
+
+    <div class="lang-tabs-container">
+        @for (idioma of idiomasDisponibles(); track idioma.codigo) {
+        <button (click)="cambiarFiltroIdioma(idioma.codigo)" [class.active-tab]="idiomaFiltro() === idioma.codigo"
+            class="tab-btn font-pixel">
+            // {{ idioma.descripcion | uppercase }}
+        </button>
+        }
+    </div>
+
+    <section class="tm-card tm-shadow-blue tm-panel-breathing">
+        <header class="panel-header text-between">
+            <h3 class="font-vcr">{{ 'admin.gestionLenguajes.seleccionado' | transloco }} {{ idiomaFiltro() | uppercase }}</h3>
+            @if (isLoading()) {
+            <span class="loading-tag font-pixel animate-pulse">{{ 'admin.gestionLenguajes.loading' | transloco }}</span>
+            }
+        </header>
+
+        <div class="toolbar-cyber">
+            <div class="search-box">
+                <span class="search-icon font-vcr">></span>
+                <input type="text" [placeholder]="( 'admin.gestionLenguajes.filtrado' | transloco )" [value]="terminoBusqueda()"
+                    (input)="actualizarBusqueda($any($event.target).value)" class="search-input font-pixel" />
+            </div>
+
+            <button (click)="abrirModalCrear()" class="btn-action-cyber font-vcr">
+                [+] {{ 'admin.gestionLenguajes.new' | transloco }}
+            </button>
+        </div>
+
+        <div class="table-responsive-wrapper">
+            <table class="tm-pixel-table">
+                <thead>
+                    <tr class="font-vcr">
+                        <th class="col-key">{{ 'admin.gestionLenguajes.key' | transloco }}</th>
+                        <th class="col-value">{{ 'admin.gestionLenguajes.descripcion' | transloco }}</th>
+                        <th class="col-actions">{{ 'admin.gestionLenguajes.botonera' | transloco }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of traduccionesFiltradas(); track item.id) {
+                    <tr>
+                        <td class="font-pixel text-muted-cyber">{{ item.clave }}</td>
+                        <td>
+                            <input type="text" [value]="item.valor" #inputValor
+                                (blur)="guardarCambioEnLinea(item, inputValor.value)"
+                                (keydown.enter)="guardarCambioEnLinea(item, inputValor.value); inputValor.blur()"
+                                class="inline-edit-input font-pixel" />
+                        </td>
+                        <td class="cell-center">
+                            <button (click)="eliminarClaveDiccionario(item.clave)" class="btn-delete-cyber font-vcr">
+                                [X]
+                            </button>
+                        </td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                        <td colspan="3" class="empty-notice font-pixel">
+                            {{ 'admin.gestionLenguajes.noData' | transloco }}
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    @if (mostrarModal()) {
+    <div class="cyber-modal-overlay">
+        <div class="cyber-modal tm-card tm-shadow-blue">
+            <header class="panel-header">
+                <h3 class="font-vcr highlight-mint">// {{ 'admin.gestionLenguajes.titleNew' | transloco }}</h3>
+            </header>
+
+            <div class="modal-body font-pixel">
+                <div class="form-group">
+                    <label class="font-vcr">{{ 'admin.gestionLenguajes.keyNew' | transloco }}</label>
+                    <input type="text" [(ngModel)]="nuevaClave" [placeholder]="'admin.gestionLenguajes.ejemploNew' | transloco"
+                        class="inline-edit-input" />
+
+                    @if (erroresValidacion()?.clave) {
+                    <small class="pixel-validation-error animate-pulse validation-margin">
+                        {{ erroresValidacion().clave[0] }}
+                    </small>
+                    }
+                </div>
+                <div class="form-group">
+                    <label class="font-vcr">{{ 'admin.gestionLenguajes.descripcionNew' | transloco }}</label>
+                    <input type="text" [(ngModel)]="nuevoValor" [placeholder]="'admin.gestionLenguajes.ejemploDescripcionNew' | transloco"
+                        class="inline-edit-input" />
+
+                    @if (erroresValidacion()?.valor) {
+                    <small class="pixel-validation-error animate-pulse validation-margin">
+                        {{ erroresValidacion().valor[0] }}
+                    </small>
+                    }
+                </div>
+            </div>
+
+            <footer class="modal-footer">
+                <button (click)="cerrarModal()" class="btn-cancel font-vcr">{{ 'admin.gestionLenguajes.btnCancel' | transloco }}</button>
+                <button (click)="crearNuevaTraduccion()" [disabled]="isLoading()"
+                    class="btn-action-cyber font-vcr">{{ 'admin.gestionLenguajes.btnSave' | transloco }}</button>
+            </footer>
+        </div>
+    </div>
+    }
+</div>

@@ -1,0 +1,14 @@
+<div class="tm-card tm-shadow-blue voxel-card" (click)="onCardClick()">
+    <div class="card-main-info">
+        <h3 class="font-vcr">{{ test().titulo || '' }}</h3>
+        <span class="category-tag font-pixel">
+            {{ test().categoria_codigo | getCategoria: categorias() }}
+        </span>
+    </div>
+
+    <div class="card-badge-zone">
+        <span class="row-badge font-pixel" [class.badge-pass]="test().estado_codigo == 'C'" [class.badge-neutral]="test().estado_codigo == 'P' || test().estado_codigo == 'EP'" [class.badge-fail]="test().estado_codigo == 'E'">
+            {{ test().estado_codigo | getEstado: estados() }}
+        </span>
+    </div>
+</div>

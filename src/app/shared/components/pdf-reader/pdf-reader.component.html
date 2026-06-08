@@ -1,0 +1,10 @@
+@if (pdfUrl) {
+<div class="pdf-reader-container">
+    <embed [src]="pdfUrl" type="application/pdf" />
+</div>
+} @else {
+<div class="loading-box-pdf">
+    <div class="spinner-pdf"></div>
+    <p class="font-vcr">{{ 'pdfReader.loading' | transloco }}</p>
+</div>
+}

@@ -1,0 +1,4 @@
+<div class="tm-card tm-shadow-blue voxel-card" (click)="onCardClick()">
+    <h3 class="font-vcr">{{ doc().nombre }}</h3>
+    <span class="category-tag font-pixel">{{ doc().categoria_codigo | getCategoria: categorias() }}</span>
+</div>

@@ -1,0 +1,89 @@
+<div class="test-runner-container">
+    @if (cargando()) {
+    <div class="loading-box">
+        <div class="spinner"></div>
+        <p class="font-vcr">{{ 'resolver.loading' | transloco }}</p>
+    </div>
+    } @else {
+    @if (test(); as datosTest) {
+    <header class="test-header">
+        <h1>{{ datosTest.titulo }}</h1>
+        <span class="badge-total font-pixel">{{ datosTest.configuracion.total }} {{ 'resolver.headerPreguntas' | transloco }}</span>
+    </header>
+
+    <main class="questions-list">
+        @for (pregunta of datosTest.preguntas; track $index; let qIndex = $index) {
+        <article class="tm-card tm-shadow-black question-card-margin">
+            <header class="question-meta">
+                <span class="question-number font-pixel">{{ 'resolver.headerPregunta' | transloco }} {{ qIndex + 1 }}</span>
+                @if (pregunta.tipo == 'unica_seleccion' && respuestasUsuario()[qIndex]) {
+                <button type="button" class="btn-clear-question font-pixel"
+                    (click)="limpiarRespuesta(qIndex)">{{ 'resolver.btnClear' | transloco }}</button>
+                }
+            </header>
+
+            <p class="enunciado">{{ pregunta.enunciado }}</p>
+
+            <div class="options-container">
+                @switch (pregunta.tipo) {
+
+                @case ('unica_seleccion') {
+                @for (opcion of pregunta.opciones; track $index) {
+                <label class="option-label">
+                    <input type="radio" [name]="'pregunta_' + qIndex" [ngModel]="respuestasUsuario()[qIndex]"
+                        (ngModelChange)="actualizarRespuestaUnica(qIndex, opcion)" [value]="opcion" />
+                    <span class="option-text">{{ opcion }}</span>
+                </label>
+                }
+                }
+
+                @case ('multi_respuesta') {
+                @for (opcion of pregunta.opciones; track $index) {
+                <label class="option-label">
+                    <input type="checkbox" [checked]="respuestasUsuario()[qIndex]?.includes(opcion)" [value]="opcion"
+                        (change)="onCheckboxChange(qIndex, opcion, $event)" />
+                    <span class="option-text">{{ opcion }}</span>
+                </label>
+                }
+                }
+
+                @case ('completar_escribir') {
+                <div class="input-write-container">
+                    <input type="text" class="pixel-input" [ngModel]="respuestasUsuario()[qIndex]"
+                        (ngModelChange)="actualizarRespuestaUnica(qIndex, $event)"
+                        [placeholder]="'resolver.placeholderWrite' | transloco" />
+                </div>
+                }
+                }
+            </div>
+        </article>
+        }
+    </main>
+
+    <footer class="test-actions">
+        <button class="btn-submit-test font-vcr width-auto" (click)="enviarRespuestas()">
+            {{ 'resolver.finalizar' | transloco }}
+        </button>
+    </footer>
+    }
+    }
+</div>
+
+@if (mostrarModalLogin()) {
+<div class="modal-overlay">
+    <div class="modal-wrapper-relative">
+        <button class="btn-close-floating font-vcr" (click)="mostrarModalLogin.set(false)">✕</button>
+
+        @switch (modal()) {
+        @case ('login') {
+        <app-login (loginSuccess)="onLoginExitoso()" (irARegistro)="modal.set('registro')">
+        </app-login>
+        }
+        @case ('registro') {
+        <app-register (registerSuccess)="onLoginExitoso()" (irALogin)="modal.set('login')">
+        </app-register>
+        }
+        }
+    </div>
+</div>
+}

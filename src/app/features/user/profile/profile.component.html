@@ -1,0 +1,172 @@
+<div class="profile-container">
+
+    @if (cargando()) {
+    <div class="modal-overlay">
+        <div class="modal-box">
+            <div class="load-notice">
+                <p class="font-vcr">{{ 'profile.loading' | transloco }}</p>
+            </div>
+        </div>
+    </div>
+    } @else {
+
+    @if (authService.currentUser(); as usuario) {
+    <header class="tm-card tm-shadow-blue profile-hero-layout">
+        <div class="avatar-pixel font-vcr">{{ (usuario.Name.substring(0, 2) || 'TM').toUpperCase() }}</div>
+        <div class="hero-info">
+            <h1>{{ usuario.Name }} <span class="nickname-span font-pixel">{{ '@' + usuario.Nickname }}</span></h1>
+            <p class="user-email">{{ usuario.Email }}</p>
+            <span class="user-badge-plan font-vcr">{{ authService.userPlan() | getTier: tiers() }}</span>
+        </div>
+        <button class="btn-config font-vcr" (click)="abrirModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 2048 2048"
+                style="vertical-align: middle; margin-right: 0.25rem;">
+                <path d="M0 0h2048v2048H0z" fill="none" />
+                <path fill="currentColor"
+                    d="M1783 988v18q0 9 1 18v18q0 9-1 18l259 161l-159 383l-297-68q-24 26-50 50l68 297l-383 159l-161-259h-18q-9 0-18 1h-18q-9 0-18-1l-161 259l-383-159l68-297q-26-24-50-50l-297 68L6 1221l259-161v-18q0-9-1-18v-18q0-9 1-18L6 827l159-383l297 68q24-26 50-50l-68-297L827 6l161 259h18q9 0 18-1h18q9 0 18 1L1221 6l383 159l-68 297q26 24 50 50l297-68l159 383zm-117 130q2-24 4-47t2-48q0-23-2-47t-4-47l236-147l-86-208l-271 63q-31-38-63-70t-71-64l63-271l-208-86l-148 236q-23-2-47-4t-47-2q-24 0-47 2t-48 4L782 146l-208 86l63 271q-38 31-70 63t-64 71l-271-63l-86 208l236 148q-2 24-4 47t-2 48q0 23 2 47t4 47l-236 147l86 208l271-63q31 38 63 70t71 64l-63 271l208 86l148-236q23 2 47 4t47 2q24 0 47-2t48-4l147 236l208-86l-63-271q38-31 70-63t64-71l271 63l86-208zm-642-470q78 0 146 29t120 81t80 119t30 147q0 78-29 146t-81 120t-119 80t-147 30q-78 0-146-29t-120-81t-80-119t-30-147q0-78 29-146t81-120t119-80t147-30m0 640q55 0 103-20t84-57t56-84t21-103q0-55-20-103t-57-84t-84-56t-103-21q-55 0-103 20t-84 57t-56 84t-21 103q0 55 20 103t57 84t84 56t103 21" />
+            </svg>{{ 'profile.conf' | transloco }}
+        </button>
+    </header>
+    }
+
+    <section class="metrics-dashboard">
+        <div class="tm-card metric-card-alignment">
+            <span class="metric-title font-pixel">{{ 'profile.mediaAcademica' | transloco }}</span>
+            <span class="metric-value font-pixel highlight-mint">{{ metricService.metrics().mediaResultados }}</span>
+        </div>
+        <div class="tm-card metric-card-alignment">
+            <span class="metric-title font-pixel">{{ 'profile.cantTest' | transloco }}</span>
+            <span class="metric-value font-pixel">{{ metricService.metrics().totalRealizados }}</span>
+        </div>
+        <div class="tm-card metric-card-alignment">
+            <span class="metric-title font-pixel">{{ 'profile.topCategoria' | transloco }}</span>
+            <span class="metric-value font-vcr metric-value-text">{{ metricService.metrics().categoriaMasRealizada
+                }}</span>
+        </div>
+    </section>
+
+    <div class="recent-activity-grid">
+        <section class="tm-card tm-shadow-black local-panel-padding">
+            <header class="panel-header" (click)="navegarA('attempts')">
+                <h3 class="font-vcr">{{ 'profile.historial' | transloco }}</h3>
+                <span class="view-all-link font-pixel">{{ 'profile.verTodo' | transloco }} ➔</span>
+            </header>
+
+            <div class="list-container">
+                @for (intento of ultimosIntentos(); track intento.id) {
+                <div class="tm-list-row" (click)="irACorrecion(intento.id)">
+                    <div class="row-main">
+                        <span class="row-title">{{ intento.test?.titulo || '' }}</span>
+                        <span class="row-subtitle font-vcr">{{ intento.test?.documento?.categoria?.nombre_traducido ||
+                            '' }}</span>
+                    </div>
+                    <span class="row-badge font-pixel" [class.badge-pass]="intento.nota >= 5"
+                        [class.badge-fail]="intento.nota < 5">
+                        {{ intento.nota }}
+                    </span>
+                </div>
+                } @empty {
+                <div class="empty-list-notice font-pixel">{{ 'profile.noHistorial' | transloco }}</div>
+                }
+            </div>
+        </section>
+
+        <section class="tm-card tm-shadow-black local-panel-padding">
+            <header class="panel-header" (click)="navegarA('history')">
+                <h3 class="font-vcr">{{ 'profile.misTests' | transloco }}</h3>
+                <span class="view-all-link font-pixel">{{ 'profile.verTodo' | transloco }} ➔</span>
+            </header>
+            <div class="list-container">
+                @for (test of ultimosCreados(); track test.id) {
+                <div class="tm-list-row" (click)="irAEdicion(test.id)">
+                    <div class="row-main">
+                        <span class="row-title">{{ test.titulo }}</span>
+                        <span class="row-subtitle font-vcr">{{ test.categoria_codigo | getCategoria: categorias()
+                            }}</span>
+                    </div>
+                    <span class="row-badge badge-neutral font-vcr" [class.badge-pass]="test.estado_codigo == 'C'"
+                        [class.badge-neutral]="test.estado_codigo == 'P' || test.estado_codigo == 'EP'"
+                        [class.badge-fail]="test.estado_codigo == 'E'">{{ test.estado_codigo | getEstado: estados()
+                        }}</span>
+                </div>
+                } @empty {
+                <div class="empty-list-notice font-pixel">{{ 'profile.noCreados' | transloco }}</div>
+                }
+            </div>
+        </section>
+    </div>
+    }
+
+    @if (mostrarModalConfig()) {
+    <div class="modal-overlay">
+        <div class="modal-box">
+            <header class="modal-header">
+                <h2>{{ 'profile.config.title' | transloco }}</h2>
+                <button class="btn-close-modal" (click)="mostrarModalConfig.set(false)">✕</button>
+            </header>
+            <form class="modal-form" (ngSubmit)="guardarCambiosPerfil()">
+
+                @if (msjError()) {
+                <div class="error-notice">{{ msjError() }}</div>
+                }
+
+                <label class="form-field">
+                    <span>{{ 'profile.config.name' | transloco }}</span>
+                    <input type="text" [(ngModel)]="editForm().Name" name="name" required
+                        class="pixel-input font-pixel" />
+                    @if (erroresValidacion()?.name) {
+                    <small class="pixel-validation-error animate-pulse">
+                        {{ erroresValidacion().name[0] }}
+                    </small>
+                    }
+                </label>
+
+                <label class="form-field">
+                    <span>{{ 'profile.config.nickname' | transloco }}</span>
+                    <input type="text" [(ngModel)]="editForm().Nickname" name="nickname" required
+                        class="pixel-input font-pixel" />
+                    @if (erroresValidacion()?.nickname) {
+                    <small class="pixel-validation-error animate-pulse">
+                        {{ erroresValidacion().nickname[0] }}
+                    </small>
+                    }
+                </label>
+
+                <label class="form-field">
+                    <span>{{ 'profile.config.email' | transloco }}</span>
+                    <input type="email" [(ngModel)]="editForm().Email" name="email" required class="pixel-input" />
+                    @if (erroresValidacion()?.email) {
+                    <small class="pixel-validation-error animate-pulse">
+                        {{ erroresValidacion().email[0] }}
+                    </small>
+                    }
+                </label>
+
+                <fieldset class="password-fieldset">
+                    <legend class="font-pixel">{{ 'profile.config.cambiarPassword' | transloco }}</legend>
+                    <label class="form-field">
+                        <span>{{ 'profile.config.password' | transloco }}</span>
+                        <input type="password" [(ngModel)]="editForm().password" name="password" class="pixel-input"
+                            autocomplete="new-password" />
+                        @if (erroresValidacion()?.password) {
+                        <small class="pixel-validation-error animate-pulse">
+                            {{ erroresValidacion().password[0] }}
+                        </small>
+                        }
+                    </label>
+                    <label class="form-field">
+                        <span>{{ 'profile.config.passwordConfirm' | transloco }}</span>
+                        <input type="password" [(ngModel)]="editForm().password_confirmation"
+                            name="password_confirmation" class="pixel-input" />
+                    </label>
+                </fieldset>
+
+                <footer class="modal-actions">
+                    <button type="button" class="btn-cancel" (click)="mostrarModalConfig.set(false)">{{ 'profile.config.btnCancel' | transloco }}</button>
+                    <button type="submit" class="btn-save">{{ 'profile.config.btnSave' | transloco }}</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+    }
+</div>

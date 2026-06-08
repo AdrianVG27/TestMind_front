@@ -1,0 +1,7 @@
+<select [(ngModel)]="idiomaActual" (ngModelChange)="cambiarIdioma($event)" class="lang-dropdown font-pixel">
+    @for (idioma of idiomasBD(); track idioma.codigo) {
+    <option [value]="idioma.codigo">
+        {{ idioma.descripcion }}
+    </option>
+    }
+</select>

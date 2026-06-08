@@ -1,0 +1,41 @@
+.tm-metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    padding: 0 1rem;
+}
+
+.tm-chart-card {
+    width: 100%;
+    max-width: 550px;
+    margin: 0 auto;
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .5;
+    }
+}
+
+@media (min-width: 992px) {
+    .tm-metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 3rem;
+    }
+
+    .tm-chart-full-width {
+        grid-column: 1 / -1;
+        max-width: 100% !important;
+    }
+}
